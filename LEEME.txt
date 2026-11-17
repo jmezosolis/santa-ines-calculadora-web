@@ -1,0 +1,93 @@
+SANTA INÉS CALCULADORA
+======================
+
+Qué es
+------
+Una app web instalable (PWA) para estimar el peso de ovinos Santa Inés,
+guardar el historial de cada animal y ver su gráfica de crecimiento.
+Funciona en Android e iOS sin pasar por la tienda de apps, y también sin
+conexión una vez instalada.
+
+Contenido de la carpeta
+-----------------------
+  index.html              la app
+  manifest.webmanifest    datos de instalación (nombre, icono, colores)
+  sw.js                   funcionamiento sin conexión
+  icons/                  iconos de la app
+  LEEME.txt               este archivo
+
+
+PASO 1: publicarla en internet (una sola vez)
+----------------------------------------------
+La app debe estar en una dirección https://  para poder instalarse.
+Opciones gratuitas y sencillas:
+
+  A) Netlify Drop (la más fácil, sin cuenta de programación)
+     1. Entra a https://app.netlify.com/drop
+     2. Crea una cuenta gratuita.
+     3. Arrastra la carpeta SantaInesCalculadora completa a la página.
+     4. Netlify te da una dirección, por ejemplo https://algo.netlify.app
+
+  B) GitHub Pages
+     1. Crea un repositorio público y sube los archivos de la carpeta.
+     2. En Settings > Pages, activa la publicación de la rama principal.
+     3. La dirección queda como https://tuusuario.github.io/repositorio/
+
+Importante: sube la carpeta con su contenido (index.html dentro de la raíz),
+no la carpeta dentro de otra carpeta.
+
+
+PASO 2: instalarla en el celular
+---------------------------------
+Android (Chrome):
+  1. Abre la dirección en Chrome.
+  2. Toca el menú (tres puntos) > "Instalar aplicación" o "Agregar a la
+     pantalla de inicio".
+  3. Aparece el icono de Santa Inés en el celular.
+
+iPhone / iPad (Safari):
+  1. Abre la dirección en Safari (en iOS solo Safari puede instalarla).
+  2. Toca el botón Compartir (cuadro con flecha hacia arriba).
+  3. Elige "Agregar a pantalla de inicio".
+  4. Aparece el icono de Santa Inés. Ábrelo desde ahí.
+
+
+Cómo usarla
+-----------
+1. Crea un animal con "+ Nuevo animal" (nombre o identificador y sexo).
+2. Elige el modo de cálculo:
+   - Altura + perímetro + sexo: el más preciso (error medio 3,6 kg, 8,6 %).
+   - Solo perímetro: más práctico, con una sola cinta (error medio 4,1 kg).
+3. Escribe las medidas y, si lo pesaste en báscula, el peso real.
+4. Toca "Guardar en historial". La gráfica de crecimiento se actualiza sola.
+5. Usa "Exportar respaldo (CSV)" de vez en cuando para guardar una copia
+   de todos tus datos. Puedes abrir ese archivo en Excel.
+
+Datos y privacidad
+------------------
+- Los datos se guardan SOLO en el navegador de ese celular o computadora.
+  No se envían a ningún servidor.
+- Si borras los datos del navegador, o cambias de celular, los registros se
+  pierden. Por eso conviene exportar el respaldo CSV periódicamente y
+  guardarlo en otro lugar. Para restaurarlo: "Importar respaldo".
+
+
+Limitaciones de las estimaciones
+---------------------------------
+- Son orientativas. Fueron entrenadas con ovinos Santa Inés de siete
+  haciendas (2005 a 2019) y validadas con animales de esa misma base.
+- La precisión baja fuera del rango de medidas (perímetro 46-113 cm,
+  altura 43-81 cm) o en animales de otras razas o manejos.
+- Corderos menores de 20 kg tienen mayor error relativo.
+- La edad no se usa: no mejora la predicción una vez que se mide el
+  perímetro (y la altura, en el modo completo).
+- Para decisiones de compra o venta, conviene confirmar con báscula.
+
+
+Cambiar el icono o el nombre
+----------------------------
+- Nombre visible: edita "name" y "short_name" en manifest.webmanifest.
+- Icono: reemplaza los archivos de la carpeta icons/ con imágenes del
+  mismo tamaño (192x192, 512x512 y 180x180).
+- Después de cambiar algo, sube de nuevo la carpeta y en el celular
+  reinstala la app.
