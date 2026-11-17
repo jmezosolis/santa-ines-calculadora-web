@@ -90,6 +90,10 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .selector button[aria-pressed="true"]{background:var(--navy);color:var(--navy-fg)}
 .selector button:active{transform:scale(.98)}
 input:disabled{opacity:.45}
+#val-tabla table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+#val-tabla th,#val-tabla td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:right}
+#val-tabla th:first-child,#val-tabla td:first-child{text-align:left}
+#val-tabla th{color:var(--muted);font-weight:600;font-size:12.5px}
 
 /* ---------- Móvil ---------- */
 @media (max-width:460px){
@@ -172,6 +176,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
   <nav class="tabs" aria-label="Navegación principal">
     <button type="button" data-vista="v-medir" aria-current="page">Medir</button>
     <button type="button" data-vista="v-animales">Animales</button>
+    <button type="button" data-vista="v-valid">Validación</button>
     <button type="button" data-vista="v-datos">Datos</button>
   </nav>
 </header>
@@ -216,6 +221,15 @@ dialog h3{margin:0 0 10px;font-size:17px}
         <label class="campo">Altura a la cruz (cm)
           <input id="alt" type="number" inputmode="decimal" step="0.5" min="43" max="81" placeholder="Opcional">
           <span class="ayuda">Modelo: 43 a 81 cm</span>
+        </label>
+      </div>
+
+      <div class="fila2">
+        <label class="campo">Operador
+          <input id="operador" type="text" maxlength="40" placeholder="Opcional" autocomplete="off">
+        </label>
+        <label class="campo">Báscula
+          <input id="bascula" type="text" maxlength="40" placeholder="Opcional" autocomplete="off">
         </label>
       </div>
 
@@ -279,6 +293,25 @@ dialog h3{margin:0 0 10px;font-size:17px}
       <p class="nota" style="margin-top:0"><b>Con altura y perímetro:</b> error medio de 3,7 kg (8,6 %).</p>
       <p class="nota"><b>Solo perímetro:</b> error medio de 4,1 kg (9,6 %).</p>
       <p class="nota">Entrenado con ovinos Santa Inés de siete haciendas (2005 a 2019). Las estimaciones son orientativas: fuera de los rangos indicados o en otras razas, la precisión baja.</p>
+    </div>
+  </section>
+
+  <!-- ===== VALIDACIÓN ===== -->
+  <section class="view" id="v-valid" aria-label="Validación">
+    <div class="card">
+      <h2>Validación de ecuaciones</h2>
+      <p class="nota" style="margin-top:0">Las ecuaciones están fijas: no se reentrenan con estas mediciones. Cada estimación se compara contra el peso de báscula registrado.</p>
+      <div id="val-tabla" style="margin-top:12px"></div>
+      <p class="nota" id="val-aviso"></p>
+    </div>
+    <div class="card">
+      <h2>Concordancia (Bland-Altman)</h2>
+      <div class="selector" role="group" aria-label="Ecuación a graficar">
+        <button type="button" data-ba="completo" aria-pressed="true"><span class="nom">Altura + perímetro</span></button>
+        <button type="button" data-ba="ptor" aria-pressed="false"><span class="nom">Solo perímetro</span></button>
+      </div>
+      <div id="val-ba"></div>
+      <p class="nota" id="val-ba-nota"></p>
     </div>
   </section>
 
@@ -366,7 +399,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
     });
     window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
     if(v === 'v-animales') { animalVer = null; renderListaAnimales(); }
-    if(v === 'v-datos') {}
+    if(v === 'v-valid') renderValidacion();
   }
   document.querySelectorAll('nav.tabs button').forEach(function(b){
     b.addEventListener('click', function(){ vibrar(); ir(b.dataset.vista); });
@@ -448,7 +481,8 @@ dialog h3{margin:0 0 10px;font-size:17px}
     var real = num($('real').value);
     a.registros.push({
       fecha: $('fecha').value || hoyISO(), ptor: r.ptor, alt: r.alt, modo: r.usaAlt ? 'completo' : 'ptor',
-      estimado: r1(r.estimado), real: (real && real > 0) ? r1(real) : null
+      estimado: r1(r.estimado), real: (real && real > 0) ? r1(real) : null,
+      operador: $('operador').value.trim(), bascula: $('bascula').value.trim()
     });
     ordenar(a);
     if(guardar()){ vibrar(); toast('Medición guardada · ' + a.nombre); }
@@ -563,6 +597,97 @@ dialog h3{margin:0 0 10px;font-size:17px}
   $('confirmar-no').addEventListener('click', function(){ accionPendiente = null; $('dlg-confirmar').close(); });
   $('confirmar-si').addEventListener('click', function(){ var f = accionPendiente; accionPendiente = null; $('dlg-confirmar').close(); if(f) f(); });
 
+  // ---------- Validación de ecuaciones (ecuaciones fijas) ----------
+  var valModelo = 'completo';
+
+  // Registros con báscula para un modelo; la estimación se recalcula con la ecuación fija
+  function registrosConBascula(modo){
+    var out = [];
+    datos.animales.forEach(function(a){
+      a.registros.forEach(function(r){
+        if(!(r.real > 0) || !(r.ptor > 0)) return;
+        if(modo === 'completo' && !(r.alt > 0)) return;
+        out.push({ real:r.real, pred: predecir(modo === 'completo', r.ptor, r.alt || 0, a.sexo).p });
+      });
+    });
+    return out;
+  }
+
+  function metricasVal(modo){
+    var R = registrosConBascula(modo), n = R.length;
+    if(!n) return { n:0 };
+    var sumAbs = 0, sumSq = 0, sumPct = 0, sumE = 0, ybar = 0;
+    R.forEach(function(x){
+      var e = x.pred - x.real;
+      sumAbs += Math.abs(e); sumSq += e*e; sumPct += Math.abs(e)/x.real*100; sumE += e; ybar += x.real;
+    });
+    ybar /= n;
+    var sst = 0, ssr = 0;
+    R.forEach(function(x){ sst += (x.real-ybar)*(x.real-ybar); ssr += (x.real-x.pred)*(x.real-x.pred); });
+    return { n:n, mae:sumAbs/n, rmse:Math.sqrt(sumSq/n), mape:sumPct/n, sesgo:sumE/n, r2: sst > 0 ? 1 - ssr/sst : NaN };
+  }
+
+  function renderValidacion(){
+    var c = metricasVal('completo'), p = metricasVal('ptor');
+    var f = function(v, d){ return (v === undefined || isNaN(v)) ? '—' : v.toFixed(d).replace('.', ','); };
+    var filas = [
+      ['Registros con báscula', c.n || 0, p.n || 0],
+      ['Error absoluto medio (kg)', f(c.mae,2), f(p.mae,2)],
+      ['RMSE (kg)', f(c.rmse,2), f(p.rmse,2)],
+      ['Error porcentual medio (%)', f(c.mape,1), f(p.mape,1)],
+      ['Sesgo: estimado − báscula (kg)', f(c.sesgo,2), f(p.sesgo,2)],
+      ['R²', f(c.r2,3), f(p.r2,3)]
+    ];
+    var html = '<table><thead><tr><th>Indicador</th><th>Altura + perímetro</th><th>Solo perímetro</th></tr></thead><tbody>';
+    filas.forEach(function(r){ html += '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>'; });
+    html += '</tbody></table>';
+    $('val-tabla').innerHTML = html;
+    var minN = Math.min(c.n || 0, p.n || 0);
+    $('val-aviso').textContent = (c.n || p.n)
+      ? (minN < 30 ? 'Muestra pequeña (menos de 30 registros en alguna ecuación): resultados preliminares.' : '')
+      : 'Aún no hay mediciones con peso de báscula. Registra la báscula al medir para validar.';
+    renderBA();
+  }
+
+  function renderBA(){
+    var R = registrosConBascula(valModelo), box = $('val-ba'), nota = $('val-ba-nota');
+    box.innerHTML = '';
+    document.querySelectorAll('[data-ba]').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.ba === valModelo ? 'true':'false'); });
+    if(R.length < 3){
+      box.innerHTML = '<div class="vacio">Se necesitan al menos 3 mediciones con báscula para esta ecuación.</div>';
+      nota.textContent = ''; return;
+    }
+    var pts = R.map(function(x){ return { x:(x.pred + x.real)/2, y:x.pred - x.real }; });
+    var mean = 0; pts.forEach(function(p){ mean += p.y; }); mean /= pts.length;
+    var v = 0; pts.forEach(function(p){ v += (p.y-mean)*(p.y-mean); });
+    var sd = Math.sqrt(v/(pts.length-1));
+    var lo = mean - 1.96*sd, hi = mean + 1.96*sd;
+    var xs = pts.map(function(p){ return p.x; }), ys = pts.map(function(p){ return p.y; });
+    var xmin = Math.min.apply(null, xs), xmax = Math.max.apply(null, xs);
+    var pad = (xmax - xmin) * 0.05 || 5; xmin -= pad; xmax += pad;
+    var yAbs = Math.max(Math.abs(Math.min.apply(null, ys)), Math.abs(Math.max.apply(null, ys)), Math.abs(lo), Math.abs(hi)) * 1.15 || 5;
+    var W = 640, H = 300, m = {t:16,r:16,b:40,l:52};
+    var X = function(x){ return m.l + (x-xmin)/(xmax-xmin)*(W-m.l-m.r); };
+    var Y = function(y){ return (H-m.b) - (y+yAbs)/(2*yAbs)*(H-m.t-m.b); };
+    var svg = '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Gráfica de Bland-Altman">';
+    svg += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+Y(0)+'" y2="'+Y(0)+'" stroke="var(--line)"/>';
+    svg += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+Y(lo)+'" y2="'+Y(lo)+'" stroke="var(--danger)" stroke-dasharray="5 4"/>';
+    svg += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+Y(hi)+'" y2="'+Y(hi)+'" stroke="var(--danger)" stroke-dasharray="5 4"/>';
+    svg += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+Y(mean)+'" y2="'+Y(mean)+'" stroke="var(--navy)" stroke-width="2"/>';
+    svg += '<text x="'+(m.l-8)+'" y="'+(Y(yAbs)+4)+'" text-anchor="end">'+Math.round(yAbs)+'</text>';
+    svg += '<text x="'+(m.l-8)+'" y="'+(Y(0)+4)+'" text-anchor="end">0</text>';
+    svg += '<text x="'+(m.l-8)+'" y="'+(Y(-yAbs)+4)+'" text-anchor="end">'+Math.round(-yAbs)+'</text>';
+    svg += '<text x="'+(W/2)+'" y="'+(H-8)+'" text-anchor="middle">Promedio de estimado y báscula (kg)</text>';
+    svg += '<text transform="rotate(-90 14 '+(H/2)+')" x="14" y="'+(H/2)+'" text-anchor="middle">Estimado − báscula (kg)</text>';
+    pts.forEach(function(p){ svg += '<circle cx="'+X(p.x).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="4" fill="var(--navy)" fill-opacity=".55"/>'; });
+    svg += '</svg>';
+    box.innerHTML = svg;
+    nota.textContent = 'Sesgo medio: ' + fmt(mean).replace(',', ',') + ' kg. Límites de concordancia (95 %): ' + fmt(lo) + ' a ' + fmt(hi) + ' kg. n = ' + pts.length + '.';
+  }
+  document.querySelectorAll('[data-ba]').forEach(function(b){
+    b.addEventListener('click', function(){ vibrar(); valModelo = b.dataset.ba; renderBA(); });
+  });
+
   // ---------- Respaldo CSV ----------
   function escCSV(v){ v=(v===null||v===undefined)?'':String(v); return /[",;\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }
   function parseLinea(l){
@@ -573,8 +698,8 @@ dialog h3{margin:0 0 10px;font-size:17px}
     out.push(cur); return out;
   }
   $('btn-exportar').addEventListener('click', function(){
-    var filas = [['animal','sexo','fecha','perimetro_cm','altura_cm','modo','peso_estimado_kg','peso_bascula_kg']];
-    datos.animales.forEach(function(a){ a.registros.forEach(function(r){ filas.push([a.nombre,a.sexo,r.fecha,r.ptor,r.alt,r.modo,r.estimado,r.real]); }); });
+    var filas = [['animal','sexo','fecha','perimetro_cm','altura_cm','modo','peso_estimado_kg','peso_bascula_kg','operador','bascula']];
+    datos.animales.forEach(function(a){ a.registros.forEach(function(r){ filas.push([a.nombre,a.sexo,r.fecha,r.ptor,r.alt,r.modo,r.estimado,r.real,r.operador||'',r.bascula||'']); }); });
     var csv = '﻿' + filas.map(function(f){ return f.map(escCSV).join(','); }).join('\n');
     var url = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
     var a = document.createElement('a'); a.href = url; a.download = 'santa-ines-historial-' + hoyISO() + '.csv';
