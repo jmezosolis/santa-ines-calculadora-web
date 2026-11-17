@@ -58,6 +58,13 @@ main{max-width:640px;margin:0 auto;padding:14px max(14px,env(safe-area-inset-rig
 .card h2{font-size:20px;margin:0 0 14px;font-weight:700}
 .card h3{font-size:16px;margin:0 0 10px;font-weight:700}
 
+/* Selector de modelo */
+.selector{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px}
+.selector button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:600;padding:9px 8px;border-radius:10px;cursor:pointer;transition:background .25s,color .25s;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.2}
+.selector button .err{font-size:12px;font-weight:500;opacity:.85}
+.selector button[aria-pressed="true"]{background:var(--navy);color:var(--navy-fg)}
+.selector button:active{transform:scale(.98)}
+
 /* Formularios */
 .fila2{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-bottom:12px}
 label.campo{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--fg);font-weight:600;min-width:0}
@@ -69,6 +76,7 @@ input:focus,select:focus{outline:2px solid var(--navy);outline-offset:0;backgrou
 input[type=date]{min-height:46px}
 input[type=number]{-moz-appearance:textfield}
 input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input:disabled{opacity:.45}
 
 .btn{display:block;width:100%;border:0;border-radius:14px;padding:15px;font:inherit;font-size:16px;font-weight:700;background:var(--navy);color:var(--navy-fg);cursor:pointer;margin-top:6px;transition:transform .12s,opacity .2s}
 .btn:active{transform:scale(.98)}
@@ -84,35 +92,6 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .estimacion .peso.pulso{transform:scale(1.05)}
 .estimacion .rango{text-align:center;color:var(--muted);font-size:14px}
 .estimacion .metodo{text-align:center;color:var(--muted);font-size:12.5px;margin-top:8px}
-.selector{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px}
-.selector button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:600;padding:9px 8px;border-radius:10px;cursor:pointer;transition:background .25s,color .25s;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.2}
-.selector button .err{font-size:12px;font-weight:500;opacity:.85}
-.selector button[aria-pressed="true"]{background:var(--navy);color:var(--navy-fg)}
-.selector button:active{transform:scale(.98)}
-input:disabled{opacity:.45}
-
-/* ---------- Móvil ---------- */
-@media (max-width:460px){
-  header.top{flex-wrap:wrap;row-gap:8px;padding-top:calc(8px + env(safe-area-inset-top,0px));padding-bottom:8px}
-  .marca span{font-size:15px}
-  nav.tabs{width:100%;justify-content:space-between}
-  nav.tabs button{flex:1 1 0;font-size:13px;padding:8px 4px;text-align:center}
-  main{padding-top:12px}
-  .card{padding:14px;border-radius:14px}
-  .card h2{font-size:18px;margin-bottom:12px}
-  .fila2{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-  .fila2 label.campo{font-size:13px}
-  input,select{font-size:16px} /* evita zoom automático en iOS */
-  .btn{padding:14px;font-size:16px}
-  .estimacion .peso{font-size:40px}
-  .selector button{padding:8px 6px}
-  .selector button .nom{font-size:14px}
-  .stats{grid-template-columns:1fr 1fr}
-  .stat .n{font-size:17px}
-  .registro{grid-template-columns:auto 1fr;}
-  .registro .reg-pesos{grid-column:2;text-align:left}
-  .toast{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
-}
 .aviso{background:var(--warn-bg);color:var(--warn-fg);border-radius:12px;padding:10px 12px;font-size:13px;margin-top:12px;display:none}
 .aviso.on{display:block}
 .aviso div+div{margin-top:4px}
@@ -126,7 +105,7 @@ input:disabled{opacity:.45}
 .animal-item:active{background:var(--pill);border-radius:12px}
 .volver{border:0;background:transparent;color:var(--navy);font:inherit;font-weight:600;padding:6px 0;margin-bottom:8px;cursor:pointer}
 
-/* Historial dentro de animal */
+/* Historial */
 .registro{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
 .registro:last-child{border-bottom:0}
 .fecha-bloque{background:var(--pill);border-radius:12px;padding:7px 9px;text-align:center;min-width:56px}
@@ -154,6 +133,7 @@ input:disabled{opacity:.45}
 p.nota{font-size:13px;color:var(--muted);margin:10px 0 0}
 .pie{text-align:center;color:var(--muted);font-size:12.5px;line-height:1.5;padding:18px 8px 6px}
 .hidden{display:none !important}
+select.idioma{max-width:220px}
 
 /* Diálogo y aviso */
 dialog{border:0;border-radius:18px;background:var(--card);color:var(--fg);width:min(92vw,400px);padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
@@ -161,6 +141,29 @@ dialog::backdrop{background:rgba(10,14,22,.45)}
 dialog h3{margin:0 0 10px;font-size:17px}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--navy);color:var(--navy-fg);padding:11px 18px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:30;max-width:90vw;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Móvil ---------- */
+@media (max-width:460px){
+  header.top{flex-wrap:wrap;row-gap:8px;padding-top:calc(8px + env(safe-area-inset-top,0px));padding-bottom:8px}
+  .marca span{font-size:15px}
+  nav.tabs{width:100%;justify-content:space-between}
+  nav.tabs button{flex:1 1 0;font-size:13px;padding:8px 4px;text-align:center}
+  main{padding-top:12px}
+  .card{padding:14px;border-radius:14px}
+  .card h2{font-size:18px;margin-bottom:12px}
+  .fila2{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .fila2 label.campo{font-size:13px}
+  input,select{font-size:16px} /* evita zoom automático en iOS */
+  .btn{padding:14px;font-size:16px}
+  .estimacion .peso{font-size:40px}
+  .selector button{padding:8px 6px}
+  .selector button .nom{font-size:14px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat .n{font-size:17px}
+  .registro{grid-template-columns:auto 1fr;}
+  .registro .reg-pesos{grid-column:2;text-align:left}
+  .toast{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+}
 </style>
 </head>
 <body>
@@ -171,9 +174,9 @@ dialog h3{margin:0 0 10px;font-size:17px}
     <span>Santa Inés</span>
   </div>
   <nav class="tabs" aria-label="Navegación principal">
-    <button type="button" data-vista="v-medir" aria-current="page">Medir</button>
-    <button type="button" data-vista="v-animales">Animales</button>
-    <button type="button" data-vista="v-datos">Datos</button>
+    <button type="button" data-vista="v-medir" aria-current="page" data-i18n="tab.medir">Medir</button>
+    <button type="button" data-vista="v-animales" data-i18n="tab.animales">Animales</button>
+    <button type="button" data-vista="v-datos" data-i18n="tab.datos">Datos</button>
   </nav>
 </header>
 
@@ -181,54 +184,55 @@ dialog h3{margin:0 0 10px;font-size:17px}
 
   <!-- ===== MEDIR ===== -->
   <section class="view activa" id="v-medir" aria-label="Medir">
-    <div class="selector" role="group" aria-label="Modelo de estimación">
-      <button type="button" data-modelo="completo" aria-pressed="true"><span class="nom">Altura + perímetro</span><span class="err">error medio ±3,7 kg</span></button>
-      <button type="button" data-modelo="ptor" aria-pressed="false"><span class="nom">Solo perímetro</span><span class="err">error medio ±4,1 kg</span></button>
+    <div class="selector" role="group" aria-label="Modelo de estimación" data-i18n-aria="aria.modelo">
+      <button type="button" data-modelo="completo" aria-pressed="true"><span class="nom" data-i18n="modelo.completo">Altura + perímetro</span><span class="err" data-i18n="err.completo">error medio ±3,7 kg</span></button>
+      <button type="button" data-modelo="ptor" aria-pressed="false"><span class="nom" data-i18n="modelo.ptor">Solo perímetro</span><span class="err" data-i18n="err.ptor">error medio ±4,1 kg</span></button>
     </div>
+
     <div class="card">
-      <h2>Nueva medición</h2>
+      <h2 data-i18n="card.nueva">Nueva medición</h2>
       <div class="fila2">
-        <label class="campo">Animal
-          <input id="animal" type="text" maxlength="40" placeholder="Identificación" autocomplete="off" list="lista-animales">
+        <label class="campo"><span data-i18n="lbl.animal">Animal</span>
+          <input id="animal" type="text" maxlength="40" autocomplete="off" list="lista-animales" data-i18n-ph="ph.animal" placeholder="Identificación">
         </label>
-        <label class="campo">Fecha
+        <label class="campo"><span data-i18n="lbl.fecha">Fecha</span>
           <input id="fecha" type="date">
         </label>
       </div>
       <datalist id="lista-animales"></datalist>
 
       <div class="fila2">
-        <label class="campo">Sexo
+        <label class="campo"><span data-i18n="lbl.sexo">Sexo</span>
           <select id="sexo">
-            <option value="hembra">Hembra</option>
-            <option value="macho">Macho</option>
+            <option value="hembra" data-i18n="opt.hembra">Hembra</option>
+            <option value="macho" data-i18n="opt.macho">Macho</option>
           </select>
         </label>
-        <label class="campo">Peso de báscula (kg)
-          <input id="real" type="number" inputmode="decimal" step="0.1" min="1" max="250" placeholder="Opcional">
+        <label class="campo"><span data-i18n="lbl.real">Peso de báscula (kg)</span>
+          <input id="real" type="number" inputmode="decimal" step="0.1" min="1" max="250" data-i18n-ph="ph.opcional" placeholder="Opcional">
         </label>
       </div>
 
       <div class="fila2">
-        <label class="campo">P. torácico (cm)
-          <input id="ptor" type="number" inputmode="decimal" step="0.5" min="46" max="113" placeholder="Ej. 85">
-          <span class="ayuda">Modelo: 46 a 113 cm</span>
+        <label class="campo"><span data-i18n="lbl.ptor">P. torácico (cm)</span>
+          <input id="ptor" type="number" inputmode="decimal" step="0.5" min="46" max="113" placeholder="85">
+          <span class="ayuda" data-i18n="ayuda.ptor">Modelo: 46 a 113 cm</span>
         </label>
-        <label class="campo">Altura a la cruz (cm)
-          <input id="alt" type="number" inputmode="decimal" step="0.5" min="43" max="81" placeholder="Opcional">
-          <span class="ayuda">Modelo: 43 a 81 cm</span>
+        <label class="campo"><span data-i18n="lbl.alt">Altura a la cruz (cm)</span>
+          <input id="alt" type="number" inputmode="decimal" step="0.5" min="43" max="81" data-i18n-ph="ph.opcional" placeholder="Opcional">
+          <span class="ayuda" data-i18n="ayuda.alt">Modelo: 43 a 81 cm</span>
         </label>
       </div>
 
-      <button class="btn" id="btn-guardar" type="button">Guardar medición</button>
+      <button class="btn" id="btn-guardar" type="button" data-i18n="btn.guardar">Guardar medición</button>
     </div>
 
     <div class="card estimacion" aria-live="polite">
-      <h2>Estimación</h2>
-      <div id="est-vacia" class="vacia">Escribe el perímetro torácico para ver el peso estimado. Si agregas la altura, la estimación es más precisa.</div>
+      <h2 data-i18n="card.estimacion">Estimación</h2>
+      <div id="est-vacia" class="vacia" data-i18n="est.vacia">Escribe el perímetro torácico para ver el peso estimado. Si agregas la altura, la estimación es más precisa.</div>
       <div id="est-valor" class="hidden">
         <div class="peso" id="peso">—</div>
-        <div class="rango">Rango aproximado al 95 %: <span id="rango">—</span></div>
+        <div class="rango"><span data-i18n="est.rango">Rango aproximado al 95 %:</span> <span id="rango">—</span></div>
         <div class="metodo" id="metodo"></div>
       </div>
       <div class="aviso" id="aviso" role="status"></div>
@@ -239,26 +243,26 @@ dialog h3{margin:0 0 10px;font-size:17px}
   <section class="view" id="v-animales" aria-label="Animales">
     <div id="lista-vista">
       <div class="card">
-        <h2>Animales</h2>
+        <h2 data-i18n="animales.titulo">Animales</h2>
         <div id="lista-animales-ui"></div>
       </div>
     </div>
     <div id="detalle-vista" class="hidden">
-      <button class="volver" id="btn-volver" type="button">← Volver a animales</button>
+      <button class="volver" id="btn-volver" type="button" data-i18n="animales.volver">← Volver a animales</button>
       <div class="card">
-        <h2 id="det-nombre">Animal</h2>
+        <h2 id="det-nombre">—</h2>
         <div id="det-grafica"></div>
         <div class="leyenda">
-          <span><i style="background:var(--real)"></i>Báscula</span>
-          <span><i style="background:var(--est)"></i>Estimado</span>
+          <span><i style="background:var(--real)"></i><span data-i18n="leyenda.bascula">Báscula</span></span>
+          <span><i style="background:var(--est)"></i><span data-i18n="leyenda.estimado">Estimado</span></span>
         </div>
         <div class="stats" id="det-stats"></div>
       </div>
       <div class="card">
-        <h3>Historial</h3>
+        <h3 data-i18n="hist.titulo">Historial</h3>
         <div id="det-historial"></div>
         <div class="acciones" style="margin-top:14px">
-          <button class="btn peligro pequeno" id="btn-borrar-animal" type="button">Eliminar este animal</button>
+          <button class="btn peligro pequeno" id="btn-borrar-animal" type="button" data-i18n="btn.eliminarAnimal">Eliminar este animal</button>
         </div>
       </div>
     </div>
@@ -267,31 +271,39 @@ dialog h3{margin:0 0 10px;font-size:17px}
   <!-- ===== DATOS ===== -->
   <section class="view" id="v-datos" aria-label="Datos">
     <div class="card">
-      <h2>Respaldo</h2>
-      <p class="nota" style="margin-top:0">Los datos se guardan solo en este dispositivo. Exporta un respaldo de vez en cuando para no perderlos.</p>
+      <h2 data-i18n="datos.idioma">Idioma</h2>
+      <select id="idioma" class="idioma" aria-label="Idioma">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+      </select>
+    </div>
+    <div class="card">
+      <h2 data-i18n="datos.respaldo">Respaldo</h2>
+      <p class="nota" style="margin-top:0" data-i18n="datos.nota">Los datos se guardan solo en este dispositivo. Exporta un respaldo de vez en cuando para no perderlos.</p>
       <div class="acciones" style="margin-top:12px">
-        <button class="btn sec pequeno" id="btn-exportar" type="button">Exportar CSV</button>
-        <button class="btn sec pequeno" id="btn-importar" type="button">Importar CSV</button>
+        <button class="btn sec pequeno" id="btn-exportar" type="button" data-i18n="btn.exportar">Exportar CSV</button>
+        <button class="btn sec pequeno" id="btn-importar" type="button" data-i18n="btn.importar">Importar CSV</button>
         <input type="file" id="archivo-import" accept=".csv,text/csv" class="hidden">
       </div>
     </div>
     <div class="card">
-      <h2>Modelo</h2>
-      <p class="nota" style="margin-top:0"><b>Con altura y perímetro:</b> error medio de 3,7 kg (8,6 %).</p>
-      <p class="nota"><b>Solo perímetro:</b> error medio de 4,1 kg (9,6 %).</p>
-      <p class="nota">Entrenado con ovinos Santa Inés de siete haciendas (2005 a 2019). Las estimaciones son orientativas: fuera de los rangos indicados o en otras razas, la precisión baja.</p>
+      <h2 data-i18n="datos.modelo">Modelo</h2>
+      <p class="nota" style="margin-top:0" data-i18n-html="datos.m1">.</p>
+      <p class="nota" data-i18n-html="datos.m2">.</p>
+      <p class="nota" data-i18n="datos.m3">.</p>
     </div>
   </section>
 
-  <div class="pie">Estimación de peso vivo para ovinos Santa Inés.</div>
+  <div class="pie" data-i18n="pie">Estimación de peso vivo para ovinos Santa Inés.</div>
 </main>
 
 <!-- Confirmación -->
 <dialog id="dlg-confirmar">
   <h3 id="confirmar-texto">¿Continuar?</h3>
   <div class="acciones" style="margin-top:14px">
-    <button class="btn sec" type="button" id="confirmar-no">Cancelar</button>
-    <button class="btn peligro" type="button" id="confirmar-si">Eliminar</button>
+    <button class="btn sec" type="button" id="confirmar-no" data-i18n="btn.cancelar">Cancelar</button>
+    <button class="btn peligro" type="button" id="confirmar-si" data-i18n="btn.eliminar">Eliminar</button>
   </div>
 </dialog>
 
@@ -302,6 +314,185 @@ dialog h3{margin:0 0 10px;font-size:17px}
   "use strict";
   var $ = function(id){ return document.getElementById(id); };
   var STORE = 'sicalc.v1';
+  var LANG_KEY = 'sicalc.lang';
+
+  // ---------- Idioma ----------
+  var T = {
+    es: {
+      'tab.medir':'Medir','tab.animales':'Animales','tab.datos':'Datos',
+      'aria.modelo':'Modelo de estimación',
+      'modelo.completo':'Altura + perímetro','modelo.ptor':'Solo perímetro',
+      'err.completo':'error medio ±3,7 kg','err.ptor':'error medio ±4,1 kg',
+      'card.nueva':'Nueva medición','card.estimacion':'Estimación',
+      'lbl.animal':'Animal','ph.animal':'Identificación','lbl.fecha':'Fecha','lbl.sexo':'Sexo',
+      'opt.hembra':'Hembra','opt.macho':'Macho',
+      'lbl.real':'Peso de báscula (kg)','ph.opcional':'Opcional',
+      'lbl.ptor':'P. torácico (cm)','ayuda.ptor':'Modelo: 46 a 113 cm',
+      'lbl.alt':'Altura a la cruz (cm)','ayuda.alt':'Modelo: 43 a 81 cm',
+      'btn.guardar':'Guardar medición',
+      'est.vacia':'Escribe el perímetro torácico para ver el peso estimado. Si agregas la altura, la estimación es más precisa.',
+      'est.faltaAlt':'Escribe la altura a la cruz para usar el modelo de altura + perímetro.',
+      'est.rango':'Rango aproximado al 95 %:',
+      'metodo.completo':'Método: altura + perímetro + sexo','metodo.ptor':'Método: solo perímetro',
+      'warn.ptor':'Perímetro fuera del rango del modelo ({a}–{b} cm). Estimación menos confiable.',
+      'warn.alt':'Altura fuera del rango del modelo ({a}–{b} cm). Estimación menos confiable.',
+      'animales.titulo':'Animales','animales.vacio':'Aún no hay animales. Registra una medición en la pestaña Medir.',
+      'animales.volver':'← Volver a animales','med.1':'medición','med.n':'mediciones',
+      'hembra':'Hembra','macho':'Macho',
+      'det.vacia':'La gráfica aparecerá con la primera medición.',
+      'leyenda.bascula':'Báscula','leyenda.estimado':'Estimado',
+      'stat.ultimo':'Último peso','stat.mediciones':'Mediciones','stat.ganancia':'Ganancia promedio','stat.cambio':'Cambio total',
+      'hist.titulo':'Historial','hist.vacio':'Sin mediciones.',
+      'reg.perimetro':'perímetro','reg.altura':'altura','reg.solo':'solo perímetro','reg.bascula':'báscula',
+      'btn.borrar':'Borrar','aria.borrar':'Borrar medición',
+      'confirm.medicion':'¿Borrar la medición del {f}?',
+      'confirm.animal':'¿Eliminar a {n} y todo su historial?',
+      'btn.eliminarAnimal':'Eliminar este animal','btn.cancelar':'Cancelar','btn.eliminar':'Eliminar',
+      'datos.idioma':'Idioma','datos.respaldo':'Respaldo',
+      'datos.nota':'Los datos se guardan solo en este dispositivo. Exporta un respaldo de vez en cuando para no perderlos.',
+      'btn.exportar':'Exportar CSV','btn.importar':'Importar CSV',
+      'datos.modelo':'Modelo',
+      'datos.m1':'<b>Con altura y perímetro:</b> error medio de 3,7 kg (8,6 %).',
+      'datos.m2':'<b>Solo perímetro:</b> error medio de 4,1 kg (9,6 %).',
+      'datos.m3':'Entrenado con ovinos Santa Inés de siete haciendas (2005 a 2019). Las estimaciones son orientativas: fuera de los rangos indicados o en otras razas, la precisión baja.',
+      'pie':'Estimación de peso vivo para ovinos Santa Inés.',
+      'toast.animal':'Escribe la identificación del animal','toast.ptor':'Escribe el perímetro torácico','toast.alt':'Escribe la altura a la cruz',
+      'toast.guardada':'Medición guardada · {n}','toast.noguardar':'No se pudo guardar en este dispositivo',
+      'toast.eliminada':'Medición eliminada','toast.animalEliminado':'Animal eliminado',
+      'toast.exportado':'Respaldo exportado','toast.importadas':'Importadas {n} mediciones','toast.invalido':'El archivo no es un respaldo válido',
+      'meses':['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],
+      'loc':'es-MX', 'dec':','
+    },
+    en: {
+      'tab.medir':'Measure','tab.animales':'Animals','tab.datos':'Data',
+      'aria.modelo':'Estimation model',
+      'modelo.completo':'Height + chest','modelo.ptor':'Chest only',
+      'err.completo':'mean error ±3.7 kg','err.ptor':'mean error ±4.1 kg',
+      'card.nueva':'New measurement','card.estimacion':'Estimate',
+      'lbl.animal':'Animal','ph.animal':'Identification','lbl.fecha':'Date','lbl.sexo':'Sex',
+      'opt.hembra':'Female','opt.macho':'Male',
+      'lbl.real':'Scale weight (kg)','ph.opcional':'Optional',
+      'lbl.ptor':'Chest girth (cm)','ayuda.ptor':'Model: 46 to 113 cm',
+      'lbl.alt':'Withers height (cm)','ayuda.alt':'Model: 43 to 81 cm',
+      'btn.guardar':'Save measurement',
+      'est.vacia':'Enter chest girth to see the estimated weight. Adding height makes the estimate more accurate.',
+      'est.faltaAlt':'Enter withers height to use the height + chest model.',
+      'est.rango':'Approx. 95 % range:',
+      'metodo.completo':'Method: height + chest + sex','metodo.ptor':'Method: chest only',
+      'warn.ptor':'Chest girth outside model range ({a}–{b} cm). Less reliable estimate.',
+      'warn.alt':'Withers height outside model range ({a}–{b} cm). Less reliable estimate.',
+      'animales.titulo':'Animals','animales.vacio':'No animals yet. Record a measurement in the Measure tab.',
+      'animales.volver':'← Back to animals','med.1':'measurement','med.n':'measurements',
+      'hembra':'Female','macho':'Male',
+      'det.vacia':'The chart will appear with the first measurement.',
+      'leyenda.bascula':'Scale','leyenda.estimado':'Estimated',
+      'stat.ultimo':'Latest weight','stat.mediciones':'Measurements','stat.ganancia':'Average gain','stat.cambio':'Total change',
+      'hist.titulo':'History','hist.vacio':'No measurements.',
+      'reg.perimetro':'chest','reg.altura':'height','reg.solo':'chest only','reg.bascula':'scale',
+      'btn.borrar':'Delete','aria.borrar':'Delete measurement',
+      'confirm.medicion':'Delete the measurement from {f}?',
+      'confirm.animal':'Delete {n} and all their history?',
+      'btn.eliminarAnimal':'Delete this animal','btn.cancelar':'Cancel','btn.eliminar':'Delete',
+      'datos.idioma':'Language','datos.respaldo':'Backup',
+      'datos.nota':'Data is stored only on this device. Export a backup from time to time so you don\'t lose it.',
+      'btn.exportar':'Export CSV','btn.importar':'Import CSV',
+      'datos.modelo':'Model',
+      'datos.m1':'<b>Height + chest:</b> mean error 3.7 kg (8.6 %).',
+      'datos.m2':'<b>Chest only:</b> mean error 4.1 kg (9.6 %).',
+      'datos.m3':'Trained on Santa Inês sheep from seven farms (2005–2019). Estimates are indicative: outside the stated ranges or in other breeds, accuracy drops.',
+      'pie':'Live weight estimation for Santa Inês sheep.',
+      'toast.animal':'Enter the animal\'s identification','toast.ptor':'Enter chest girth','toast.alt':'Enter withers height',
+      'toast.guardada':'Measurement saved · {n}','toast.noguardar':'Could not save on this device',
+      'toast.eliminada':'Measurement deleted','toast.animalEliminado':'Animal deleted',
+      'toast.exportado':'Backup exported','toast.importadas':'Imported {n} measurements','toast.invalido':'The file is not a valid backup',
+      'meses':['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      'loc':'en-US', 'dec':'.'
+    },
+    pt: {
+      'tab.medir':'Medir','tab.animales':'Animais','tab.datos':'Dados',
+      'aria.modelo':'Modelo de estimativa',
+      'modelo.completo':'Altura + perímetro','modelo.ptor':'Só perímetro',
+      'err.completo':'erro médio ±3,7 kg','err.ptor':'erro médio ±4,1 kg',
+      'card.nueva':'Nova medição','card.estimacion':'Estimativa',
+      'lbl.animal':'Animal','ph.animal':'Identificação','lbl.fecha':'Data','lbl.sexo':'Sexo',
+      'opt.hembra':'Fêmea','opt.macho':'Macho',
+      'lbl.real':'Peso na balança (kg)','ph.opcional':'Opcional',
+      'lbl.ptor':'Perímetro torácico (cm)','ayuda.ptor':'Modelo: 46 a 113 cm',
+      'lbl.alt':'Altura da cernelha (cm)','ayuda.alt':'Modelo: 43 a 81 cm',
+      'btn.guardar':'Salvar medição',
+      'est.vacia':'Digite o perímetro torácico para ver o peso estimado. Com a altura, a estimativa é mais precisa.',
+      'est.faltaAlt':'Digite a altura da cernelha para usar o modelo altura + perímetro.',
+      'est.rango':'Faixa aproximada de 95 %:',
+      'metodo.completo':'Método: altura + perímetro + sexo','metodo.ptor':'Método: só perímetro',
+      'warn.ptor':'Perímetro fora da faixa do modelo ({a}–{b} cm). Estimativa menos confiável.',
+      'warn.alt':'Altura fora da faixa do modelo ({a}–{b} cm). Estimativa menos confiável.',
+      'animales.titulo':'Animais','animales.vacio':'Ainda não há animais. Registre uma medição na aba Medir.',
+      'animales.volver':'← Voltar aos animais','med.1':'medição','med.n':'medições',
+      'hembra':'Fêmea','macho':'Macho',
+      'det.vacia':'O gráfico aparecerá com a primeira medição.',
+      'leyenda.bascula':'Balança','leyenda.estimado':'Estimado',
+      'stat.ultimo':'Último peso','stat.mediciones':'Medições','stat.ganancia':'Ganho médio','stat.cambio':'Variação total',
+      'hist.titulo':'Histórico','hist.vacio':'Sem medições.',
+      'reg.perimetro':'perímetro','reg.altura':'altura','reg.solo':'só perímetro','reg.bascula':'balança',
+      'btn.borrar':'Excluir','aria.borrar':'Excluir medição',
+      'confirm.medicion':'Excluir a medição de {f}?',
+      'confirm.animal':'Excluir {n} e todo o histórico?',
+      'btn.eliminarAnimal':'Excluir este animal','btn.cancelar':'Cancelar','btn.eliminar':'Excluir',
+      'datos.idioma':'Idioma','datos.respaldo':'Backup',
+      'datos.nota':'Os dados ficam salvos apenas neste dispositivo. Exporte um backup de tempos em tempos para não perdê-los.',
+      'btn.exportar':'Exportar CSV','btn.importar':'Importar CSV',
+      'datos.modelo':'Modelo',
+      'datos.m1':'<b>Altura + perímetro:</b> erro médio de 3,7 kg (8,6 %).',
+      'datos.m2':'<b>Só perímetro:</b> erro médio de 4,1 kg (9,6 %).',
+      'datos.m3':'Treinado com ovinos Santa Inês de sete fazendas (2005 a 2019). As estimativas são orientativas: fora das faixas indicadas ou em outras raças, a precisão diminui.',
+      'pie':'Estimativa de peso vivo para ovinos Santa Inês.',
+      'toast.animal':'Digite a identificação do animal','toast.ptor':'Digite o perímetro torácico','toast.alt':'Digite a altura da cernelha',
+      'toast.guardada':'Medição salva · {n}','toast.noguardar':'Não foi possível salvar neste dispositivo',
+      'toast.eliminada':'Medição excluída','toast.animalEliminado':'Animal excluído',
+      'toast.exportado':'Backup exportado','toast.importadas':'{n} medições importadas','toast.invalido':'O arquivo não é um backup válido',
+      'meses':['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'],
+      'loc':'pt-BR', 'dec':','
+    }
+  };
+  var lang = 'es';
+
+  function detectarIdioma(){
+    try{
+      var guardado = localStorage.getItem(LANG_KEY);
+      if(guardado && T[guardado]) return guardado;
+    }catch(e){}
+    var lista = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'es'];
+    for(var i=0;i<lista.length;i++){
+      var c = String(lista[i]).slice(0,2).toLowerCase();
+      if(T[c]) return c;
+    }
+    return 'es';
+  }
+  function t(k, vars){
+    var s = (T[lang][k] !== undefined) ? T[lang][k] : (T.es[k] !== undefined ? T.es[k] : k);
+    if(vars) for(var v in vars) s = s.split('{'+v+'}').join(vars[v]);
+    return s;
+  }
+  function aplicarIdioma(){
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-html]').forEach(function(el){ el.innerHTML = t(el.dataset.i18nHtml); });
+    document.querySelectorAll('[data-i18n-ph]').forEach(function(el){ el.placeholder = t(el.dataset.i18nPh); });
+    document.querySelectorAll('[data-i18n-aria]').forEach(function(el){ el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+    $('idioma').value = lang;
+    $('est-vacia').textContent = t('est.vacia');
+    refrescarListaNombres();
+    actualizarEstimacion();
+    if(vistaActual() === 'v-animales') { if(animalVer) renderDetalle(); else renderListaAnimales(); }
+  }
+  function vistaActual(){
+    var v = document.querySelector('.view.activa'); return v ? v.id : 'v-medir';
+  }
+  $('idioma').addEventListener('change', function(){
+    lang = $('idioma').value;
+    try{ localStorage.setItem(LANG_KEY, lang); }catch(e){}
+    aplicarIdioma();
+  });
 
   // ---------- Modelos (regresión lineal en log, datos limpios n=3598) ----------
   var MODELOS = {
@@ -309,7 +500,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
     ptor:     { b0:-7.81092, ptor:2.6106, smear:1.01276, sigma:0.1458 }
   };
   var RANGO = { ptor:[46,113], alt:[43,81] };
-  var MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  var modeloSel = 'completo';
 
   function predecir(usaAlt, ptor, alt, sexo){
     var m = usaAlt ? MODELOS.completo : MODELOS.ptor;
@@ -321,7 +512,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
 
   // ---------- Datos ----------
   var datos = { animales: [] };
-  var animalVer = null; // id del animal abierto en la pestaña Animales
+  var animalVer = null;
 
   function cargar(){
     try{
@@ -345,16 +536,16 @@ dialog h3{margin:0 0 10px;font-size:17px}
   function ordenar(a){ a.registros.sort(function(x,y){ return x.fecha < y.fecha ? -1 : x.fecha > y.fecha ? 1 : 0; }); }
 
   // ---------- Utilidades ----------
-  function fmt(x){ return x.toFixed(1).replace('.', ','); }
+  function fmt(x){ return x.toFixed(1).replace('.', T[lang].dec); }
   function hoyISO(){ var d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
-  function aFecha(iso){ var p=iso.split('-'); return { d:parseInt(p[2],10), m:MES[parseInt(p[1],10)-1], y:p[0] }; }
+  function aFecha(iso){ var p=iso.split('-'); return { d:parseInt(p[2],10), m:T[lang].meses[parseInt(p[1],10)-1], y:p[0] }; }
   function num(v){ var n=parseFloat(String(v).replace(',', '.')); return isNaN(n) ? null : n; }
   function r1(x){ return Math.round(x*10)/10; }
   function escHTML(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
   var toastTimer = null;
-  function toast(t){
-    var el = $('toast'); el.textContent = t; el.classList.add('on');
+  function toast(txt){
+    var el = $('toast'); el.textContent = txt; el.classList.add('on');
     clearTimeout(toastTimer); toastTimer = setTimeout(function(){ el.classList.remove('on'); }, 1800);
   }
   function vibrar(){ if(navigator.vibrate) navigator.vibrate(10); }
@@ -365,31 +556,14 @@ dialog h3{margin:0 0 10px;font-size:17px}
     document.querySelectorAll('nav.tabs button').forEach(function(b){
       if(b.dataset.vista === v) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
     });
-    window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+    window.scrollTo(0,0);
     if(v === 'v-animales') { animalVer = null; renderListaAnimales(); }
-    if(v === 'v-datos') {}
   }
   document.querySelectorAll('nav.tabs button').forEach(function(b){
     b.addEventListener('click', function(){ vibrar(); ir(b.dataset.vista); });
   });
 
-  // ---------- Formulario de medición ----------
-  function refrescarListaNombres(){
-    var dl = $('lista-animales'); dl.innerHTML = '';
-    datos.animales.slice().sort(function(a,b){ return a.nombre.localeCompare(b.nombre); }).forEach(function(a){
-      var o = document.createElement('option'); o.value = a.nombre; dl.appendChild(o);
-    });
-  }
-
-  $('animal').addEventListener('change', function(){
-    var a = buscarAnimal($('animal').value);
-    if(a){ $('sexo').value = a.sexo; }
-    actualizarEstimacion();
-  });
-  ['sexo','ptor','alt'].forEach(function(id){ $(id).addEventListener('input', actualizarEstimacion); $(id).addEventListener('change', actualizarEstimacion); });
-  // (el modelo se elige con los botones superiores; ver aplicarModelo)
-
-  var modeloSel = 'completo';
+  // ---------- Selector de modelo ----------
   function aplicarModelo(){
     document.querySelectorAll('[data-modelo]').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.modelo === modeloSel ? 'true':'false'); });
     var usaAlt = modeloSel === 'completo';
@@ -401,50 +575,62 @@ dialog h3{margin:0 0 10px;font-size:17px}
     b.addEventListener('click', function(){ vibrar(); modeloSel = b.dataset.modelo; aplicarModelo(); });
   });
 
+  // ---------- Formulario de medición ----------
+  function refrescarListaNombres(){
+    var dl = $('lista-animales'); dl.innerHTML = '';
+    datos.animales.slice().sort(function(a,b){ return a.nombre.localeCompare(b.nombre); }).forEach(function(a){
+      var o = document.createElement('option'); o.value = a.nombre; dl.appendChild(o);
+    });
+  }
+  $('animal').addEventListener('change', function(){
+    var a = buscarAnimal($('animal').value);
+    if(a){ $('sexo').value = a.sexo; }
+    actualizarEstimacion();
+  });
+  ['sexo','ptor','alt'].forEach(function(id){ $(id).addEventListener('input', actualizarEstimacion); $(id).addEventListener('change', actualizarEstimacion); });
+
   function leerForm(){
     var usaAlt = modeloSel === 'completo';
     var alt = usaAlt ? num($('alt').value) : null;
-    return { ptor:num($('ptor').value), alt:alt, usaAlt:usaAlt, sexo: $('sexo').value, faltaAlt: usaAlt && !(alt > 0) };
+    return { ptor:num($('ptor').value), alt:alt, usaAlt:usaAlt, sexo:$('sexo').value, faltaAlt: usaAlt && !(alt > 0) };
   }
 
   function actualizarEstimacion(){
     var e = leerForm(), avisos = [];
     if(!(e.ptor > 0) || e.faltaAlt){
-      $('est-vacia').textContent = e.faltaAlt && e.ptor > 0
-        ? 'Escribe la altura a la cruz para usar el modelo de altura + perímetro.'
-        : 'Escribe el perímetro torácico para ver el peso estimado.';
+      $('est-vacia').textContent = (e.faltaAlt && e.ptor > 0) ? t('est.faltaAlt') : t('est.vacia');
       $('est-vacia').classList.remove('hidden'); $('est-valor').classList.add('hidden');
       mostrarAviso([]); return null;
     }
-    if(e.ptor < RANGO.ptor[0] || e.ptor > RANGO.ptor[1]) avisos.push('Perímetro fuera del rango del modelo (' + RANGO.ptor[0] + '–' + RANGO.ptor[1] + ' cm). Estimación menos confiable.');
-    if(e.usaAlt && (e.alt < RANGO.alt[0] || e.alt > RANGO.alt[1])) avisos.push('Altura fuera del rango del modelo (' + RANGO.alt[0] + '–' + RANGO.alt[1] + ' cm). Estimación menos confiable.');
+    if(e.ptor < RANGO.ptor[0] || e.ptor > RANGO.ptor[1]) avisos.push(t('warn.ptor', {a:RANGO.ptor[0], b:RANGO.ptor[1]}));
+    if(e.usaAlt && (e.alt < RANGO.alt[0] || e.alt > RANGO.alt[1])) avisos.push(t('warn.alt', {a:RANGO.alt[0], b:RANGO.alt[1]}));
     var r = predecir(e.usaAlt, e.ptor, e.alt || 0, e.sexo);
     $('est-vacia').classList.add('hidden'); $('est-valor').classList.remove('hidden');
     var peso = $('peso'), nuevo = fmt(r.p) + ' kg';
     if(peso.textContent !== nuevo){ peso.textContent = nuevo; peso.classList.remove('pulso'); void peso.offsetWidth; peso.classList.add('pulso'); }
     $('rango').textContent = fmt(r.lo) + ' – ' + fmt(r.hi) + ' kg';
-    $('metodo').textContent = e.usaAlt ? 'Método: altura + perímetro + sexo' : 'Método: solo perímetro';
+    $('metodo').textContent = t(e.usaAlt ? 'metodo.completo' : 'metodo.ptor');
     mostrarAviso(avisos);
     return { estimado:r.p, ptor:e.ptor, alt: e.usaAlt ? e.alt : null, usaAlt:e.usaAlt };
   }
   function mostrarAviso(lista){
     var el = $('aviso'); el.innerHTML = '';
-    if(lista.length){ lista.forEach(function(t){ var p=document.createElement('div'); p.textContent=t; el.appendChild(p); }); el.classList.add('on'); }
+    if(lista.length){ lista.forEach(function(x){ var p=document.createElement('div'); p.textContent=x; el.appendChild(p); }); el.classList.add('on'); }
     else el.classList.remove('on');
   }
 
   $('btn-guardar').addEventListener('click', function(){
     var nombre = $('animal').value.trim();
-    if(!nombre){ toast('Escribe la identificación del animal'); $('animal').focus(); return; }
+    if(!nombre){ toast(t('toast.animal')); $('animal').focus(); return; }
     var r = actualizarEstimacion();
     if(!r){
       var faltaAltura = modeloSel === 'completo' && !(num($('alt').value) > 0) && num($('ptor').value) > 0;
-      toast(faltaAltura ? 'Escribe la altura a la cruz' : 'Escribe el perímetro torácico');
+      toast(faltaAltura ? t('toast.alt') : t('toast.ptor'));
       (faltaAltura ? $('alt') : $('ptor')).focus();
       return;
     }
     var a = buscarAnimal(nombre);
-    if(!a){ a = { id: nuevoId(), nombre: nombre, sexo: $('sexo').value, registros: [] }; datos.animales.push(a); }
+    if(!a){ a = { id:nuevoId(), nombre:nombre, sexo:$('sexo').value, registros:[] }; datos.animales.push(a); }
     else a.sexo = $('sexo').value;
     var real = num($('real').value);
     a.registros.push({
@@ -452,9 +638,8 @@ dialog h3{margin:0 0 10px;font-size:17px}
       estimado: r1(r.estimado), real: (real && real > 0) ? r1(real) : null
     });
     ordenar(a);
-    if(guardar()){ vibrar(); toast('Medición guardada · ' + a.nombre); }
-    else toast('No se pudo guardar en este dispositivo');
-    // Deja el nombre y la fecha para la siguiente medición; limpia solo las medidas
+    if(guardar()){ vibrar(); toast(t('toast.guardada', {n:a.nombre})); }
+    else toast(t('toast.noguardar'));
     $('ptor').value = ''; $('alt').value = ''; $('real').value = '';
     refrescarListaNombres();
     actualizarEstimacion();
@@ -465,12 +650,14 @@ dialog h3{margin:0 0 10px;font-size:17px}
     var cont = $('lista-animales-ui');
     $('lista-vista').classList.remove('hidden'); $('detalle-vista').classList.add('hidden');
     cont.innerHTML = '';
-    if(!datos.animales.length){ cont.innerHTML = '<div class="vacio">Aún no hay animales. Registra una medición en la pestaña Medir.</div>'; return; }
+    if(!datos.animales.length){ cont.innerHTML = '<div class="vacio">'+escHTML(t('animales.vacio'))+'</div>'; return; }
     datos.animales.slice().sort(function(a,b){ return a.nombre.localeCompare(b.nombre); }).forEach(function(a){
       var btn = document.createElement('button'); btn.type='button'; btn.className='animal-item';
       var ult = a.registros.length ? a.registros[a.registros.length-1] : null;
       var peso = ult ? fmt(ult.real || ult.estimado) + ' kg' : '—';
-      btn.innerHTML = '<div><div class="nom">'+escHTML(a.nombre)+'</div><div class="sub">'+(a.sexo==='macho'?'Macho':'Hembra')+' · '+a.registros.length+' medición'+(a.registros.length===1?'':'es')+'</div></div><div class="peso-ult">'+peso+'</div>';
+      var nMed = a.registros.length;
+      var sub = t(a.sexo==='macho' ? 'macho' : 'hembra') + ' · ' + nMed + ' ' + t(nMed===1 ? 'med.1' : 'med.n');
+      btn.innerHTML = '<div><div class="nom">'+escHTML(a.nombre)+'</div><div class="sub">'+escHTML(sub)+'</div></div><div class="peso-ult">'+peso+'</div>';
       btn.addEventListener('click', function(){ vibrar(); animalVer = a.id; renderDetalle(); });
       cont.appendChild(btn);
     });
@@ -489,15 +676,15 @@ dialog h3{margin:0 0 10px;font-size:17px}
   function renderGrafica(a){
     var box = $('det-grafica'), stats = $('det-stats');
     box.innerHTML = ''; stats.innerHTML = '';
-    if(!a.registros.length){ box.innerHTML = '<div class="vacio">La gráfica aparecerá con la primera medición.</div>'; return; }
+    if(!a.registros.length){ box.innerHTML = '<div class="vacio">'+escHTML(t('det.vacia'))+'</div>'; return; }
     var pts = a.registros.map(function(r){ return { t:new Date(r.fecha+'T00:00:00').getTime(), y:r.real||r.estimado, real:!!r.real, fecha:r.fecha }; });
     var tMin = Math.min.apply(null, pts.map(function(p){return p.t;})), tMax = Math.max.apply(null, pts.map(function(p){return p.t;}));
     if(tMax === tMin){ tMin -= 864e5*15; tMax += 864e5*15; }
     var yMax = Math.max.apply(null, pts.map(function(p){return p.y;})) * 1.15, yMin = 0;
     var W = 640, H = 280, m = {t:16,r:14,b:34,l:44};
-    var X = function(t){ return m.l + (t-tMin)/(tMax-tMin)*(W-m.l-m.r); };
+    var X = function(x){ return m.l + (x-tMin)/(tMax-tMin)*(W-m.l-m.r); };
     var Y = function(v){ return H-m.b - (v-yMin)/(yMax-yMin)*(H-m.t-m.b); };
-    var svg = '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Gráfica de crecimiento">';
+    var svg = '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+escHTML(t('leyenda.estimado'))+'">';
     for(var i=0;i<=4;i++){
       var v = yMin + (yMax-yMin)*i/4;
       svg += '<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="var(--line)"/>';
@@ -511,17 +698,17 @@ dialog h3{margin:0 0 10px;font-size:17px}
       svg += '<path d="'+d+'" fill="none" stroke="var(--est)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity=".45"/>';
     }
     pts.forEach(function(p){
-      svg += '<circle cx="'+X(p.t).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="5" fill="'+(p.real?'var(--real)':'var(--est)')+'" stroke="var(--card)" stroke-width="2"><title>'+p.fecha+': '+fmt(p.y)+' kg'+(p.real?' (báscula)':' (estimado)')+'</title></circle>';
+      svg += '<circle cx="'+X(p.t).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="5" fill="'+(p.real?'var(--real)':'var(--est)')+'" stroke="var(--card)" stroke-width="2"><title>'+p.fecha+': '+fmt(p.y)+' kg</title></circle>';
     });
     svg += '</svg>';
     box.innerHTML = svg;
 
     var ultimo = pts[pts.length-1].y, primero = pts[0].y;
-    var cards = [[fmt(ultimo)+' kg','Último peso'],[a.registros.length,'Mediciones']];
+    var cards = [[fmt(ultimo)+' kg', t('stat.ultimo')],[a.registros.length, t('stat.mediciones')]];
     if(pts.length >= 2){
       var dias = (pts[pts.length-1].t - pts[0].t)/864e5;
-      if(dias > 0) cards.push([Math.round((ultimo-primero)/dias*1000)+' g/día','Ganancia promedio']);
-      cards.push([fmt(ultimo-primero)+' kg','Cambio total']);
+      if(dias > 0) cards.push([Math.round((ultimo-primero)/dias*1000)+' g/d', t('stat.ganancia')]);
+      cards.push([fmt(ultimo-primero)+' kg', t('stat.cambio')]);
     }
     cards.forEach(function(c){
       var s = document.createElement('div'); s.className='stat';
@@ -532,18 +719,18 @@ dialog h3{margin:0 0 10px;font-size:17px}
 
   function renderHistorial(a){
     var lista = $('det-historial'); lista.innerHTML = '';
-    if(!a.registros.length){ lista.innerHTML = '<div class="vacio">Sin mediciones.</div>'; return; }
+    if(!a.registros.length){ lista.innerHTML = '<div class="vacio">'+escHTML(t('hist.vacio'))+'</div>'; return; }
     a.registros.slice().reverse().forEach(function(r){
       var idx = a.registros.indexOf(r), f = aFecha(r.fecha);
       var div = document.createElement('div'); div.className = 'registro';
       div.innerHTML =
         '<div class="fecha-bloque"><div class="d">'+f.d+'</div><div class="m">'+f.m+' '+f.y+'</div></div>' +
-        '<div class="reg-datos"><b>'+r.ptor+' cm</b> perímetro' + (r.alt ? ' · '+r.alt+' cm altura' : ' · solo perímetro') + '</div>' +
-        '<div class="reg-pesos"><div class="est">'+fmt(r.estimado)+' kg</div>' + (r.real ? '<div class="real">báscula '+fmt(r.real)+' kg</div>' : '') + '</div>' +
-        '<div class="reg-borrar"><button type="button">Borrar</button></div>';
+        '<div class="reg-datos"><b>'+r.ptor+' cm</b> '+t('reg.perimetro') + (r.alt ? ' · '+r.alt+' cm '+t('reg.altura') : ' · '+t('reg.solo')) + '</div>' +
+        '<div class="reg-pesos"><div class="est">'+fmt(r.estimado)+' kg</div>' + (r.real ? '<div class="real">'+t('reg.bascula')+' '+fmt(r.real)+' kg</div>' : '') + '</div>' +
+        '<div class="reg-borrar"><button type="button" aria-label="'+escHTML(t('aria.borrar'))+'">'+t('btn.borrar')+'</button></div>';
       div.querySelector('button').addEventListener('click', function(){
-        confirmar('¿Borrar la medición del '+r.fecha+'?', function(){
-          a.registros.splice(idx,1); guardar(); toast('Medición eliminada'); renderDetalle(); refrescarListaNombres();
+        confirmar(t('confirm.medicion', {f:r.fecha}), function(){
+          a.registros.splice(idx,1); guardar(); toast(t('toast.eliminada')); renderDetalle(); refrescarListaNombres();
         });
       });
       lista.appendChild(div);
@@ -552,9 +739,9 @@ dialog h3{margin:0 0 10px;font-size:17px}
 
   $('btn-borrar-animal').addEventListener('click', function(){
     var a = porId(animalVer); if(!a) return;
-    confirmar('¿Eliminar a ' + a.nombre + ' y todo su historial?', function(){
+    confirmar(t('confirm.animal', {n:a.nombre}), function(){
       datos.animales = datos.animales.filter(function(x){ return x.id !== a.id; });
-      guardar(); animalVer = null; toast('Animal eliminado'); refrescarListaNombres(); renderListaAnimales();
+      guardar(); animalVer = null; toast(t('toast.animalEliminado')); refrescarListaNombres(); renderListaAnimales();
     });
   });
 
@@ -581,7 +768,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
     var a = document.createElement('a'); a.href = url; a.download = 'santa-ines-historial-' + hoyISO() + '.csv';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
-    toast('Respaldo exportado');
+    toast(t('toast.exportado'));
   });
   $('btn-importar').addEventListener('click', function(){ $('archivo-import').click(); });
   $('archivo-import').addEventListener('change', function(ev){
@@ -602,17 +789,18 @@ dialog h3{margin:0 0 10px;font-size:17px}
           nuevos++;
         });
         datos.animales.forEach(ordenar); guardar(); refrescarListaNombres();
-        toast('Importadas ' + nuevos + ' mediciones');
-      }catch(e){ toast('El archivo no es un respaldo válido'); }
+        toast(t('toast.importadas', {n:nuevos}));
+      }catch(e){ toast(t('toast.invalido')); }
       $('archivo-import').value = '';
     };
     lector.readAsText(f,'utf-8');
   });
 
   // ---------- Inicio ----------
+  lang = detectarIdioma();
   $('fecha').value = hoyISO();
   cargar();
-  refrescarListaNombres();
+  aplicarIdioma();
   aplicarModelo();
 
   if('serviceWorker' in navigator){
