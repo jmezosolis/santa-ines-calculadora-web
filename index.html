@@ -85,10 +85,33 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .estimacion .rango{text-align:center;color:var(--muted);font-size:14px}
 .estimacion .metodo{text-align:center;color:var(--muted);font-size:12.5px;margin-top:8px}
 .selector{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px}
-.selector button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:600;padding:10px 8px;border-radius:10px;cursor:pointer;transition:background .25s,color .25s}
+.selector button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:600;padding:9px 8px;border-radius:10px;cursor:pointer;transition:background .25s,color .25s;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.2}
+.selector button .err{font-size:12px;font-weight:500;opacity:.85}
 .selector button[aria-pressed="true"]{background:var(--navy);color:var(--navy-fg)}
 .selector button:active{transform:scale(.98)}
 input:disabled{opacity:.45}
+
+/* ---------- Móvil ---------- */
+@media (max-width:460px){
+  header.top{flex-wrap:wrap;row-gap:8px;padding-top:calc(8px + env(safe-area-inset-top,0px));padding-bottom:8px}
+  .marca span{font-size:15px}
+  nav.tabs{width:100%;justify-content:space-between}
+  nav.tabs button{flex:1 1 0;font-size:13px;padding:8px 4px;text-align:center}
+  main{padding-top:12px}
+  .card{padding:14px;border-radius:14px}
+  .card h2{font-size:18px;margin-bottom:12px}
+  .fila2{grid-template-columns:1fr;gap:10px;margin-bottom:10px}
+  input,select{font-size:16px} /* evita zoom automático en iOS */
+  .btn{padding:14px;font-size:16px}
+  .estimacion .peso{font-size:40px}
+  .selector button{padding:8px 6px}
+  .selector button .nom{font-size:14px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat .n{font-size:17px}
+  .registro{grid-template-columns:auto 1fr;}
+  .registro .reg-pesos{grid-column:2;text-align:left}
+  .toast{bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+}
 .aviso{background:var(--warn-bg);color:var(--warn-fg);border-radius:12px;padding:10px 12px;font-size:13px;margin-top:12px;display:none}
 .aviso.on{display:block}
 .aviso div+div{margin-top:4px}
@@ -158,8 +181,8 @@ dialog h3{margin:0 0 10px;font-size:17px}
   <!-- ===== MEDIR ===== -->
   <section class="view activa" id="v-medir" aria-label="Medir">
     <div class="selector" role="group" aria-label="Modelo de estimación">
-      <button type="button" data-modelo="completo" aria-pressed="true">Altura + perímetro</button>
-      <button type="button" data-modelo="ptor" aria-pressed="false">Solo perímetro</button>
+      <button type="button" data-modelo="completo" aria-pressed="true"><span class="nom">Altura + perímetro</span><span class="err">error medio ±3,7 kg</span></button>
+      <button type="button" data-modelo="ptor" aria-pressed="false"><span class="nom">Solo perímetro</span><span class="err">error medio ±4,1 kg</span></button>
     </div>
     <div class="card">
       <h2>Nueva medición</h2>
@@ -253,7 +276,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
     </div>
     <div class="card">
       <h2>Modelo</h2>
-      <p class="nota" style="margin-top:0"><b>Con altura y perímetro:</b> error medio de 3,6 kg (8,6 %).</p>
+      <p class="nota" style="margin-top:0"><b>Con altura y perímetro:</b> error medio de 3,7 kg (8,6 %).</p>
       <p class="nota"><b>Solo perímetro:</b> error medio de 4,1 kg (9,6 %).</p>
       <p class="nota">Entrenado con ovinos Santa Inés de siete haciendas (2005 a 2019). Las estimaciones son orientativas: fuera de los rangos indicados o en otras razas, la precisión baja.</p>
     </div>
