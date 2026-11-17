@@ -1,12 +1,13 @@
 // Service worker: guarda la app para que funcione sin conexión.
-const VERSION = 'sicalc-v6';
+const VERSION = 'sicalc-v7';
 const SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './icons/apple-touch-icon.png'
+  './icons/apple-touch-icon.png',
+  './icons/sheep.png'
 ];
 
 self.addEventListener('install', (event) => {

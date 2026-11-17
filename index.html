@@ -7,105 +7,100 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Santa Inés">
-<meta name="description" content="Calculadora de peso para ovinos Santa Inés, con historial y gráfica de crecimiento.">
+<meta name="description" content="Estimación de peso vivo para ovinos Santa Inés, con historial por animal.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Santa Inés Calculadora</title>
 <style>
 :root{
-  --bg:#f5f9ff;--card:#ffffff;--fg:#1b2a3a;--muted:#5b6f85;--line:#d5e3f3;
-  --accent:#17263d;--accent-strong:#17263d;--accent-fg:#ffffff;--chip:#e6eaf3;
-  --ok:#2f7d5b;--warn-bg:#fff1d6;--warn-fg:#7a4b00;--danger:#b5523b;
-  --real:#2f7d5b;--est:#17263d;--nav:#ffffff;
+  --bg:#f5f6f8;--card:#ffffff;--fg:#17202e;--muted:#6b7585;--line:#e4e7ee;--field:#f2f4f7;
+  --navy:#17263d;--navy-fg:#ffffff;--pill:#e6eaf3;--est:#17263d;--real:#2f7d5b;
+  --warn-bg:#fff4e0;--warn-fg:#7a4b00;--danger:#b5523b;--nav:#ffffff;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0f1620;--card:#18212d;--fg:#e6eef8;--muted:#9fb2c8;--line:#2b3b52;
-    --accent:#8aa6cf;--accent-strong:#b9cde8;--accent-fg:#0b1a2e;--chip:#22324a;
-    --ok:#5fb88f;--warn-bg:#3a2d12;--warn-fg:#ffd58a;--danger:#e08a73;
-    --real:#5fb88f;--est:#8aa6cf;--nav:#121b26;color-scheme:dark;
+    --bg:#0e1420;--card:#172131;--fg:#e8edf5;--muted:#9aa6b8;--line:#263247;--field:#1e2a3d;
+    --navy:#8aa6cf;--navy-fg:#0b1424;--pill:#22324a;--est:#b9cde8;--real:#5fb88f;
+    --warn-bg:#3a2d12;--warn-fg:#ffd58a;--danger:#e08a73;--nav:#121b2a;color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0f1620;--card:#18212d;--fg:#e6eef8;--muted:#9fb2c8;--line:#2b3b52;
-  --accent:#8aa6cf;--accent-strong:#b9cde8;--accent-fg:#0b1a2e;--chip:#22324a;
-  --ok:#5fb88f;--warn-bg:#3a2d12;--warn-fg:#ffd58a;--danger:#e08a73;
-  --real:#5fb88f;--est:#8aa6cf;--nav:#121b26;color-scheme:dark;
+  --bg:#0e1420;--card:#172131;--fg:#e8edf5;--muted:#9aa6b8;--line:#263247;--field:#1e2a3d;
+  --navy:#8aa6cf;--navy-fg:#0b1424;--pill:#22324a;--est:#b9cde8;--real:#5fb88f;
+  --warn-bg:#3a2d12;--warn-fg:#ffd58a;--danger:#e08a73;--nav:#121b2a;color-scheme:dark;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
-body{display:flex;flex-direction:column;overflow:hidden}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+body{min-height:100%;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
 
-/* ---------- Encabezado ---------- */
-header.top{flex:0 0 auto;padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px))}
-.brand{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.brand h1{font-size:19px;margin:0;font-weight:700}
-.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none;scroll-behavior:smooth}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;transition:background .2s,color .2s,transform .15s}
-.chip:active{transform:scale(.96)}
-.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg);font-weight:600}
-.chip.add{border-style:dashed;color:var(--muted)}
+/* ---------- Encabezado con pestañas ---------- */
+header.top{position:sticky;top:0;z-index:10;background:var(--nav);border-bottom:1px solid var(--line);
+  padding:calc(10px + env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) 10px max(14px,env(safe-area-inset-left,0px));
+  display:flex;align-items:center;justify-content:space-between;gap:8px}
+.marca{display:flex;align-items:center;gap:10px;min-width:0}
+.marca img{width:34px;height:34px;object-fit:contain;flex:0 0 auto}
+.marca span{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav.tabs{display:flex;gap:4px;flex:0 0 auto}
+nav.tabs button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:500;padding:8px 11px;border-radius:999px;cursor:pointer;transition:background .25s,color .25s}
+nav.tabs button[aria-current="page"]{background:var(--pill);color:var(--fg);font-weight:600}
+nav.tabs button:active{transform:scale(.97)}
 
 /* ---------- Vistas ---------- */
-main{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;position:relative;-webkit-overflow-scrolling:touch}
-.view{display:none;padding:6px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));animation:entrar .28s ease both}
-.view.activa{display:block}
-@keyframes entrar{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion: reduce){.view,.registro{animation:none}.chip{transition:none}}
+main{max-width:640px;margin:0 auto;padding:14px max(14px,env(safe-area-inset-right,0px)) 0 max(14px,env(safe-area-inset-left,0px))}
+.view{display:none}
+.view.activa{display:block;animation:entrar .25s ease both}
+@keyframes entrar{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.view.activa{animation:none}}
 
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
-.card h2{font-size:13px;margin:0 0 12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+.card h2{font-size:20px;margin:0 0 14px;font-weight:700}
+.card h3{font-size:16px;margin:0 0 10px;font-weight:700}
 
-/* Método */
-.modo{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:4px}
-.modo button{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:10px 8px;font:inherit;font-size:14px;cursor:pointer;transition:background .25s,color .25s}
-.modo button[aria-pressed="true"]{background:var(--card);color:var(--fg);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.modo-desc{font-size:12.5px;color:var(--muted);margin:8px 2px 0}
+/* Formularios */
+.fila2{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-bottom:12px}
+label.campo{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--fg);font-weight:600;min-width:0}
+label.campo .ayuda{font-size:12px;color:var(--muted);font-weight:400}
+input,select{width:100%;font:inherit;font-size:15px;font-weight:400;padding:12px 12px;border:1px solid transparent;border-radius:12px;background:var(--field);color:var(--fg);min-width:0;font-variant-numeric:tabular-nums;appearance:none;-webkit-appearance:none}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:32px}
+input::placeholder{color:var(--muted);opacity:.85}
+input:focus,select:focus{outline:2px solid var(--navy);outline-offset:0;background:var(--card);border-color:var(--navy)}
+input[type=date]{min-height:46px}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 
-/* Medidas con paso */
-.medida{padding:12px 0;border-bottom:1px solid var(--line)}
-.medida:last-child{border-bottom:0;padding-bottom:0}
-.medida:first-child{padding-top:0}
-.medida-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.medida-nombre{font-size:14px;color:var(--muted)}
-.stepper{display:flex;align-items:center;gap:8px}
-.stepper button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;transition:transform .12s,background .2s}
-.stepper button:active{transform:scale(.9);background:var(--chip)}
-.stepper input{width:92px;text-align:center;font:inherit;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;border:0;background:transparent;color:var(--fg);padding:0;-moz-appearance:textfield}
-.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.stepper input:focus{outline:2px solid var(--accent);border-radius:8px}
-input[type=range]{width:100%;margin:10px 0 0;accent-color:var(--accent)}
-.hint{font-size:12.5px;color:var(--muted);margin-top:2px}
-
-.fila{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-label.campo{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
-input[type=date],input[type=number],input[type=text],select{width:100%;font:inherit;font-size:15px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg);font-variant-numeric:tabular-nums}
-
-/* Resultado */
-.resultado{text-align:center;background:linear-gradient(180deg,var(--card),var(--chip))}
-.resultado .etq{font-size:13px;color:var(--muted)}
-.resultado .peso{font-size:50px;font-weight:800;color:var(--accent-strong);font-variant-numeric:tabular-nums;line-height:1.1;margin:4px 0;transition:transform .25s}
-.resultado .peso.pulso{transform:scale(1.06)}
-.resultado .rango{font-size:13.5px;color:var(--muted)}
-.aviso{background:var(--warn-bg);color:var(--warn-fg);border-radius:12px;padding:10px 12px;font-size:13px;margin-top:12px;text-align:left;display:none}
-.aviso.on{display:block}
-
-/* Botones */
-.btn{display:block;width:100%;border:0;border-radius:14px;padding:14px;font:inherit;font-size:16px;font-weight:700;background:var(--accent);color:var(--accent-fg);cursor:pointer;transition:transform .12s,opacity .2s}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:15px;font:inherit;font-size:16px;font-weight:700;background:var(--navy);color:var(--navy-fg);cursor:pointer;margin-top:6px;transition:transform .12s,opacity .2s}
 .btn:active{transform:scale(.98)}
-.btn.sec{background:transparent;color:var(--accent-strong);border:1px solid var(--line);font-weight:600}
-.btn.peligro{background:transparent;color:var(--danger);border:1px solid var(--line);font-weight:600}
-.btn.pequeno{width:auto;display:inline-block;padding:9px 14px;font-size:14px}
+.btn.sec{background:transparent;color:var(--navy);border:1px solid var(--line)}
+.btn.peligro{background:transparent;color:var(--danger);border:1px solid var(--line)}
+.btn.pequeno{width:auto;display:inline-block;padding:9px 14px;font-size:14px;margin-top:0}
 .acciones{display:flex;gap:8px;flex-wrap:wrap}
 .acciones .btn{flex:1 1 auto}
 
-/* Historial */
-.registro{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);animation:entrar .3s ease both}
+/* Estimación */
+.estimacion .vacia{color:var(--muted);text-align:center;padding:26px 8px;font-size:15px;line-height:1.5}
+.estimacion .peso{font-size:46px;font-weight:800;color:var(--est);font-variant-numeric:tabular-nums;line-height:1.1;text-align:center;margin:6px 0 2px;transition:transform .25s}
+.estimacion .peso.pulso{transform:scale(1.05)}
+.estimacion .rango{text-align:center;color:var(--muted);font-size:14px}
+.estimacion .metodo{text-align:center;color:var(--muted);font-size:12.5px;margin-top:8px}
+.aviso{background:var(--warn-bg);color:var(--warn-fg);border-radius:12px;padding:10px 12px;font-size:13px;margin-top:12px;display:none}
+.aviso.on{display:block}
+.aviso div+div{margin-top:4px}
+
+/* Lista de animales */
+.animal-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 4px;border-bottom:1px solid var(--line);cursor:pointer;background:transparent;border-left:0;border-right:0;border-top:0;width:100%;font:inherit;color:inherit;text-align:left}
+.animal-item:last-child{border-bottom:0}
+.animal-item .nom{font-weight:700;font-size:16px}
+.animal-item .sub{font-size:13px;color:var(--muted)}
+.animal-item .peso-ult{font-weight:700;font-variant-numeric:tabular-nums;color:var(--est);white-space:nowrap}
+.animal-item:active{background:var(--pill);border-radius:12px}
+.volver{border:0;background:transparent;color:var(--navy);font:inherit;font-weight:600;padding:6px 0;margin-bottom:8px;cursor:pointer}
+
+/* Historial dentro de animal */
+.registro{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
 .registro:last-child{border-bottom:0}
-.fecha-bloque{background:var(--chip);border-radius:12px;padding:8px 10px;text-align:center;min-width:58px}
+.fecha-bloque{background:var(--pill);border-radius:12px;padding:7px 9px;text-align:center;min-width:56px}
 .fecha-bloque .d{font-size:18px;font-weight:800;line-height:1}
 .fecha-bloque .m{font-size:11px;color:var(--muted);text-transform:uppercase;margin-top:2px}
 .reg-datos{font-size:13px;color:var(--muted);line-height:1.5}
@@ -115,178 +110,148 @@ input[type=date],input[type=number],input[type=text],select{width:100%;font:inhe
 .reg-pesos .real{font-size:13px;color:var(--real);font-weight:600}
 .reg-borrar{grid-column:1 / -1;display:flex;justify-content:flex-end;margin-top:-4px}
 .reg-borrar button{border:0;background:transparent;color:var(--danger);font:inherit;font-size:13px;padding:4px 6px;cursor:pointer}
-.vacio{text-align:center;color:var(--muted);padding:28px 8px;font-size:14px}
-.vacio .icono{font-size:34px;margin-bottom:6px}
+.vacio{text-align:center;color:var(--muted);padding:24px 8px;font-size:14px}
 
 /* Gráfica */
 .chart{width:100%;height:auto;display:block}
 .chart text{fill:var(--muted);font-size:11px}
-.chart .punto{transition:r .2s}
 .leyenda{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
 .leyenda i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.stat{background:var(--chip);border-radius:14px;padding:12px}
-.stat .n{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.stat{background:var(--pill);border-radius:14px;padding:12px}
+.stat .n{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums}
 .stat .t{font-size:12px;color:var(--muted)}
 
-/* Navegación inferior */
-nav.tabs{flex:0 0 auto;display:grid;grid-template-columns:repeat(3,1fr);background:var(--nav);border-top:1px solid var(--line);padding:6px max(10px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
-nav.tabs button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;cursor:pointer;border-radius:12px;transition:color .2s,background .25s}
-nav.tabs button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
-nav.tabs button[aria-current="page"]{color:var(--accent-strong);font-weight:700}
-nav.tabs button[aria-current="page"] svg{transform:translateY(-1px) scale(1.08)}
-nav.tabs button:active{background:var(--chip)}
-
-/* Diálogos y avisos */
-dialog{border:0;border-radius:20px;background:var(--card);color:var(--fg);width:min(92vw,420px);padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
-dialog::backdrop{background:rgba(20,16,4,.45)}
-dialog[open]{animation:subir .25s ease both}
-@keyframes subir{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
-dialog h3{margin:0 0 14px;font-size:17px}
-.campo-dlg{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;font-size:13px;color:var(--muted)}
-.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--fg);color:var(--bg);padding:11px 16px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:20;max-width:90vw;text-align:center}
-.toast.on{opacity:1;transform:translate(-50%,0)}
-p.nota{font-size:12.5px;color:var(--muted);margin:10px 0 0}
+p.nota{font-size:13px;color:var(--muted);margin:10px 0 0}
+.pie{text-align:center;color:var(--muted);font-size:12.5px;line-height:1.5;padding:18px 8px 6px}
 .hidden{display:none !important}
+
+/* Diálogo y aviso */
+dialog{border:0;border-radius:18px;background:var(--card);color:var(--fg);width:min(92vw,400px);padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+dialog::backdrop{background:rgba(10,14,22,.45)}
+dialog h3{margin:0 0 10px;font-size:17px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--navy);color:var(--navy-fg);padding:11px 18px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:30;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
 
 <header class="top">
-  <div class="brand">
-    <h1>Santa Inés</h1>
-    <span class="hint" id="resumen-top"></span>
+  <div class="marca">
+    <img src="icons/sheep.png" alt="">
+    <span>Santa Inés</span>
   </div>
-  <div class="chips" id="chips" role="listbox" aria-label="Animales"></div>
+  <nav class="tabs" aria-label="Navegación principal">
+    <button type="button" data-vista="v-medir" aria-current="page">Medir</button>
+    <button type="button" data-vista="v-animales">Animales</button>
+    <button type="button" data-vista="v-datos">Datos</button>
+  </nav>
 </header>
 
-<main id="contenido">
+<main>
 
   <!-- ===== MEDIR ===== -->
   <section class="view activa" id="v-medir" aria-label="Medir">
-    <div class="card" id="sin-animal">
-      <div class="vacio"><div class="icono">🐑</div>Crea tu primer animal con el botón <b>+ Nuevo</b> de arriba para empezar a medir.</div>
+    <div class="card">
+      <h2>Nueva medición</h2>
+      <div class="fila2">
+        <label class="campo">Animal
+          <input id="animal" type="text" maxlength="40" placeholder="Identificación" autocomplete="off" list="lista-animales">
+        </label>
+        <label class="campo">Fecha
+          <input id="fecha" type="date">
+        </label>
+      </div>
+      <datalist id="lista-animales"></datalist>
+
+      <div class="fila2">
+        <label class="campo">Sexo
+          <select id="sexo">
+            <option value="hembra">Hembra</option>
+            <option value="macho">Macho</option>
+          </select>
+        </label>
+        <label class="campo">Peso de báscula (kg)
+          <input id="real" type="number" inputmode="decimal" step="0.1" min="1" max="250" placeholder="Opcional">
+        </label>
+      </div>
+
+      <div class="fila2">
+        <label class="campo">P. torácico (cm)
+          <input id="ptor" type="number" inputmode="decimal" step="0.5" min="46" max="113" placeholder="Ej. 85">
+          <span class="ayuda">Modelo: 46 a 113 cm</span>
+        </label>
+        <label class="campo">Altura a la cruz (cm)
+          <input id="alt" type="number" inputmode="decimal" step="0.5" min="43" max="81" placeholder="Opcional">
+          <span class="ayuda">Modelo: 43 a 81 cm</span>
+        </label>
+      </div>
+
+      <button class="btn" id="btn-guardar" type="button">Guardar medición</button>
     </div>
 
-    <div id="panel-medir" class="hidden">
-      <div class="card">
-        <h2>Método</h2>
-        <div class="modo" role="group" aria-label="Método de cálculo">
-          <button type="button" data-modo="completo" aria-pressed="true">Altura + perímetro</button>
-          <button type="button" data-modo="ptor" aria-pressed="false">Solo perímetro</button>
-        </div>
-        <p class="modo-desc" id="modo-desc"></p>
-      </div>
-
-      <div class="card">
-        <h2>Medidas</h2>
-        <div class="medida">
-          <div class="medida-top">
-            <span class="medida-nombre">Perímetro torácico</span>
-            <div class="stepper">
-              <button type="button" data-paso="ptor" data-d="-0.5" aria-label="Restar medio centímetro">−</button>
-              <input id="ptor" type="number" inputmode="decimal" step="0.5" min="46" max="113" value="85" aria-label="Perímetro torácico en centímetros">
-              <button type="button" data-paso="ptor" data-d="0.5" aria-label="Sumar medio centímetro">+</button>
-            </div>
-          </div>
-          <input id="ptor-r" type="range" min="46" max="113" step="0.5" value="85" aria-label="Perímetro torácico, deslizador">
-        </div>
-        <div class="medida" id="fila-alt">
-          <div class="medida-top">
-            <span class="medida-nombre">Altura a la cruz</span>
-            <div class="stepper">
-              <button type="button" data-paso="alt" data-d="-0.5" aria-label="Restar medio centímetro">−</button>
-              <input id="alt" type="number" inputmode="decimal" step="0.5" min="43" max="81" value="70" aria-label="Altura a la cruz en centímetros">
-              <button type="button" data-paso="alt" data-d="0.5" aria-label="Sumar medio centímetro">+</button>
-            </div>
-          </div>
-          <input id="alt-r" type="range" min="43" max="81" step="0.5" value="70" aria-label="Altura a la cruz, deslizador">
-        </div>
-      </div>
-
-      <div class="card resultado" aria-live="polite">
-        <div class="etq">Peso estimado</div>
+    <div class="card estimacion" aria-live="polite">
+      <h2>Estimación</h2>
+      <div id="est-vacia" class="vacia">Escribe el perímetro torácico para ver el peso estimado. Si agregas la altura, la estimación es más precisa.</div>
+      <div id="est-valor" class="hidden">
         <div class="peso" id="peso">—</div>
         <div class="rango">Rango aproximado al 95 %: <span id="rango">—</span></div>
-        <div class="aviso" id="aviso" role="status"></div>
+        <div class="metodo" id="metodo"></div>
       </div>
+      <div class="aviso" id="aviso" role="status"></div>
+    </div>
+  </section>
 
+  <!-- ===== ANIMALES ===== -->
+  <section class="view" id="v-animales" aria-label="Animales">
+    <div id="lista-vista">
       <div class="card">
-        <div class="fila">
-          <label class="campo">Fecha
-            <input id="fecha" type="date">
-          </label>
-          <label class="campo">Peso en báscula (kg)
-            <input id="real" type="number" inputmode="decimal" step="0.1" min="1" max="250" placeholder="Opcional">
-          </label>
+        <h2>Animales</h2>
+        <div id="lista-animales-ui"></div>
+      </div>
+    </div>
+    <div id="detalle-vista" class="hidden">
+      <button class="volver" id="btn-volver" type="button">← Volver a animales</button>
+      <div class="card">
+        <h2 id="det-nombre">Animal</h2>
+        <div id="det-grafica"></div>
+        <div class="leyenda">
+          <span><i style="background:var(--real)"></i>Báscula</span>
+          <span><i style="background:var(--est)"></i>Estimado</span>
         </div>
-        <button class="btn" id="btn-guardar" type="button">Guardar medición</button>
+        <div class="stats" id="det-stats"></div>
+      </div>
+      <div class="card">
+        <h3>Historial</h3>
+        <div id="det-historial"></div>
+        <div class="acciones" style="margin-top:14px">
+          <button class="btn peligro pequeno" id="btn-borrar-animal" type="button">Eliminar este animal</button>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== HISTORIAL ===== -->
-  <section class="view" id="v-hist" aria-label="Historial">
-    <div class="card">
-      <h2 id="hist-titulo">Historial</h2>
-      <div id="hist-lista"></div>
-    </div>
+  <!-- ===== DATOS ===== -->
+  <section class="view" id="v-datos" aria-label="Datos">
     <div class="card">
       <h2>Respaldo</h2>
-      <div class="acciones">
+      <p class="nota" style="margin-top:0">Los datos se guardan solo en este dispositivo. Exporta un respaldo de vez en cuando para no perderlos.</p>
+      <div class="acciones" style="margin-top:12px">
         <button class="btn sec pequeno" id="btn-exportar" type="button">Exportar CSV</button>
         <button class="btn sec pequeno" id="btn-importar" type="button">Importar CSV</button>
         <input type="file" id="archivo-import" accept=".csv,text/csv" class="hidden">
       </div>
-      <p class="nota">Los datos se guardan solo en este dispositivo. Exporta un respaldo de vez en cuando.</p>
     </div>
-  </section>
-
-  <!-- ===== CRECIMIENTO ===== -->
-  <section class="view" id="v-crec" aria-label="Crecimiento">
     <div class="card">
-      <h2 id="crec-titulo">Crecimiento</h2>
-      <div id="grafica"></div>
-      <div class="leyenda">
-        <span><i style="background:var(--real)"></i>Báscula</span>
-        <span><i style="background:var(--est)"></i>Estimado</span>
-      </div>
-      <div class="stats" id="stats"></div>
+      <h2>Modelo</h2>
+      <p class="nota" style="margin-top:0"><b>Con altura y perímetro:</b> error medio de 3,6 kg (8,6 %).</p>
+      <p class="nota"><b>Solo perímetro:</b> error medio de 4,1 kg (9,6 %).</p>
+      <p class="nota">Entrenado con ovinos Santa Inés de siete haciendas (2005 a 2019). Las estimaciones son orientativas: fuera de los rangos indicados o en otras razas, la precisión baja.</p>
     </div>
   </section>
 
+  <div class="pie">Estimación de peso vivo para ovinos Santa Inés.</div>
 </main>
-
-<nav class="tabs" aria-label="Navegación principal">
-  <button type="button" data-vista="v-medir" aria-current="page">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Medir</span>
-  </button>
-  <button type="button" data-vista="v-hist">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Historial</span>
-  </button>
-  <button type="button" data-vista="v-crec">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/></svg><span>Crecimiento</span>
-  </button>
-</nav>
-
-<!-- Nuevo animal -->
-<dialog id="dlg-nuevo">
-  <form id="form-nuevo">
-    <h3>Nuevo animal</h3>
-    <div class="campo-dlg">
-      <label for="nuevo-nombre">Nombre o identificador</label>
-      <input id="nuevo-nombre" type="text" maxlength="40" required placeholder="Ej. HE-0457">
-    </div>
-    <div class="campo-dlg">
-      <label for="nuevo-sexo">Sexo</label>
-      <select id="nuevo-sexo"><option value="hembra">Hembra</option><option value="macho">Macho</option></select>
-    </div>
-    <div class="acciones" style="margin-top:16px">
-      <button class="btn sec" type="button" id="btn-cancelar-nuevo">Cancelar</button>
-      <button class="btn" type="submit">Crear</button>
-    </div>
-  </form>
-</dialog>
 
 <!-- Confirmación -->
 <dialog id="dlg-confirmar">
@@ -307,25 +272,23 @@ p.nota{font-size:12.5px;color:var(--muted);margin:10px 0 0}
 
   // ---------- Modelos (regresión lineal en log, datos limpios n=3598) ----------
   var MODELOS = {
-    completo: { b0:-9.42603, ptor:1.93211, alt:1.09431, macho:0.02936, smear:1.01005, sigma:0.1309, usaAlt:true },
-    ptor:     { b0:-7.81092, ptor:2.6106, smear:1.01276, sigma:0.1458, usaAlt:false }
+    completo: { b0:-9.42603, ptor:1.93211, alt:1.09431, macho:0.02936, smear:1.01005, sigma:0.1309 },
+    ptor:     { b0:-7.81092, ptor:2.6106, smear:1.01276, sigma:0.1458 }
   };
   var RANGO = { ptor:[46,113], alt:[43,81] };
   var MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 
-  function predecir(modo, ptor, alt, sexo){
-    var m = MODELOS[modo];
+  function predecir(usaAlt, ptor, alt, sexo){
+    var m = usaAlt ? MODELOS.completo : MODELOS.ptor;
     var mu = m.b0 + m.ptor*Math.log(ptor);
-    if(m.usaAlt){ mu += m.alt*Math.log(alt); if(sexo === 'macho') mu += m.macho; }
+    if(usaAlt){ mu += m.alt*Math.log(alt); if(sexo === 'macho') mu += m.macho; }
     var c = Math.exp(mu) * m.smear;
     return { p:c, lo:c*Math.exp(-1.96*m.sigma), hi:c*Math.exp(1.96*m.sigma) };
   }
 
-  // ---------- Estado ----------
+  // ---------- Datos ----------
   var datos = { animales: [] };
-  var animalId = null;
-  var modo = 'completo';
-  var vista = 'v-medir';
+  var animalVer = null; // id del animal abierto en la pestaña Animales
 
   function cargar(){
     try{
@@ -336,129 +299,83 @@ p.nota{font-size:12.5px;color:var(--muted);margin:10px 0 0}
   function guardar(){
     try{ localStorage.setItem(STORE, JSON.stringify(datos)); return true; }catch(e){ return false; }
   }
-  function animal(){
-    for(var i=0;i<datos.animales.length;i++) if(datos.animales[i].id === animalId) return datos.animales[i];
+  function nuevoId(){ return 'a' + Date.now().toString(36) + Math.floor(Math.random()*1e4).toString(36); }
+  function buscarAnimal(nombre){
+    var n = nombre.trim().toLowerCase();
+    for(var i=0;i<datos.animales.length;i++) if(datos.animales[i].nombre.trim().toLowerCase() === n) return datos.animales[i];
     return null;
   }
-  function nuevoId(){ return 'a' + Date.now().toString(36) + Math.floor(Math.random()*1e4).toString(36); }
+  function porId(id){
+    for(var i=0;i<datos.animales.length;i++) if(datos.animales[i].id === id) return datos.animales[i];
+    return null;
+  }
+  function ordenar(a){ a.registros.sort(function(x,y){ return x.fecha < y.fecha ? -1 : x.fecha > y.fecha ? 1 : 0; }); }
 
   // ---------- Utilidades ----------
   function fmt(x){ return x.toFixed(1).replace('.', ','); }
   function hoyISO(){ var d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
   function aFecha(iso){ var p=iso.split('-'); return { d:parseInt(p[2],10), m:MES[parseInt(p[1],10)-1], y:p[0] }; }
   function num(v){ var n=parseFloat(String(v).replace(',', '.')); return isNaN(n) ? null : n; }
-  function redondear1(x){ return Math.round(x*10)/10; }
-  function ordenar(a){ a.registros.sort(function(x,y){ return x.fecha < y.fecha ? -1 : x.fecha > y.fecha ? 1 : 0; }); }
+  function r1(x){ return Math.round(x*10)/10; }
+  function escHTML(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
   var toastTimer = null;
   function toast(t){
     var el = $('toast'); el.textContent = t; el.classList.add('on');
     clearTimeout(toastTimer); toastTimer = setTimeout(function(){ el.classList.remove('on'); }, 1800);
   }
-  function vibrar(){ if(navigator.vibrate) navigator.vibrate(12); }
+  function vibrar(){ if(navigator.vibrate) navigator.vibrate(10); }
 
   // ---------- Navegación ----------
   function ir(v){
-    vista = v;
     document.querySelectorAll('.view').forEach(function(s){ s.classList.toggle('activa', s.id === v); });
     document.querySelectorAll('nav.tabs button').forEach(function(b){
       if(b.dataset.vista === v) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
     });
-    $('contenido').scrollTop = 0;
-    if(v === 'v-hist') renderHistorial();
-    if(v === 'v-crec') renderGrafica();
+    window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+    if(v === 'v-animales') { animalVer = null; renderListaAnimales(); }
+    if(v === 'v-datos') {}
   }
   document.querySelectorAll('nav.tabs button').forEach(function(b){
     b.addEventListener('click', function(){ vibrar(); ir(b.dataset.vista); });
   });
 
-  // ---------- Animales (chips) ----------
-  function renderChips(){
-    var cont = $('chips'); cont.innerHTML = '';
-    datos.animales.forEach(function(a){
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = 'chip'; b.setAttribute('role','option');
-      b.setAttribute('aria-pressed', a.id === animalId ? 'true' : 'false');
-      b.textContent = a.nombre;
-      b.addEventListener('click', function(){ vibrar(); animalId = a.id; renderTodo(); });
-      cont.appendChild(b);
+  // ---------- Formulario de medición ----------
+  function refrescarListaNombres(){
+    var dl = $('lista-animales'); dl.innerHTML = '';
+    datos.animales.slice().sort(function(a,b){ return a.nombre.localeCompare(b.nombre); }).forEach(function(a){
+      var o = document.createElement('option'); o.value = a.nombre; dl.appendChild(o);
     });
-    var add = document.createElement('button');
-    add.type = 'button'; add.className = 'chip add'; add.textContent = '+ Nuevo';
-    add.addEventListener('click', function(){ $('nuevo-nombre').value=''; $('dlg-nuevo').showModal(); setTimeout(function(){ $('nuevo-nombre').focus(); },50); });
-    cont.appendChild(add);
-    var a = animal();
-    $('resumen-top').textContent = a ? (a.sexo === 'macho' ? '♂' : '♀') : '';
-    var act = cont.querySelector('[aria-pressed="true"]');
-    if(act && act.scrollIntoView) act.scrollIntoView({ inline:'center', block:'nearest', behavior:'smooth' });
   }
 
-  $('btn-cancelar-nuevo').addEventListener('click', function(){ $('dlg-nuevo').close(); });
-  $('form-nuevo').addEventListener('submit', function(ev){
-    ev.preventDefault();
-    var nombre = $('nuevo-nombre').value.trim(); if(!nombre) return;
-    var a = { id: nuevoId(), nombre: nombre, sexo: $('nuevo-sexo').value, registros: [] };
-    datos.animales.push(a); guardar(); animalId = a.id;
-    $('dlg-nuevo').close(); vibrar(); toast('Animal creado'); renderTodo();
+  $('animal').addEventListener('change', function(){
+    var a = buscarAnimal($('animal').value);
+    if(a){ $('sexo').value = a.sexo; }
+    actualizarEstimacion();
   });
+  ['sexo','ptor','alt'].forEach(function(id){ $(id).addEventListener('input', actualizarEstimacion); $(id).addEventListener('change', actualizarEstimacion); });
 
-  // ---------- Modo ----------
-  document.querySelectorAll('[data-modo]').forEach(function(b){
-    b.addEventListener('click', function(){ modo = b.dataset.modo; vibrar(); actualizarModo(); });
-  });
-  function actualizarModo(){
-    document.querySelectorAll('[data-modo]').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.modo === modo ? 'true':'false'); });
-    var usaAlt = MODELOS[modo].usaAlt;
-    $('fila-alt').classList.toggle('hidden', !usaAlt);
-    $('modo-desc').textContent = usaAlt
-      ? 'Más preciso: error medio de 3,6 kg (8,6 %).'
-      : 'Más práctico, con una sola cinta: error medio de 4,1 kg (9,6 %).';
-    actualizarResultado();
+  function leerForm(){
+    var alt = num($('alt').value);
+    return { ptor:num($('ptor').value), alt:alt, usaAlt: alt !== null && alt > 0, sexo: $('sexo').value };
   }
 
-  // ---------- Medidas: pasos y deslizadores ----------
-  function setMedida(k, v){
-    var n = $(k), r = $(k+'-r');
-    var min = parseFloat(n.min), max = parseFloat(n.max);
-    v = Math.min(max, Math.max(min, Math.round(v*2)/2));
-    n.value = v; r.value = v;
-    actualizarResultado();
-  }
-  document.querySelectorAll('[data-paso]').forEach(function(b){
-    b.addEventListener('click', function(){
-      var k = b.dataset.paso, cur = num($(k).value) || 0;
-      vibrar(); setMedida(k, cur + parseFloat(b.dataset.d));
-    });
-  });
-  [['ptor','ptor-r'],['alt','alt-r']].forEach(function(p){
-    $(p[0]).addEventListener('input', function(){ var v=num($(p[0]).value); if(v!==null) $(p[1]).value = v; actualizarResultado(); });
-    $(p[1]).addEventListener('input', function(){ $(p[0]).value = $(p[1]).value; actualizarResultado(); });
-  });
-
-  // ---------- Resultado ----------
-  function leer(){
-    var a = animal();
-    return { ptor:num($('ptor').value), alt: MODELOS[modo].usaAlt ? num($('alt').value) : null, sexo: a ? a.sexo : 'hembra' };
-  }
-  function actualizarResultado(){
-    var e = leer(), avisos = [];
-    var ok = e.ptor > 0 && (!MODELOS[modo].usaAlt || e.alt > 0);
-    if(!ok){
-      $('peso').textContent = '—'; $('rango').textContent = '—';
-      avisos.push('Completa las medidas para ver el peso.');
-      mostrarAviso(avisos); return null;
+  function actualizarEstimacion(){
+    var e = leerForm(), avisos = [];
+    if(!(e.ptor > 0)){
+      $('est-vacia').classList.remove('hidden'); $('est-valor').classList.add('hidden');
+      mostrarAviso([]); return null;
     }
-    if(e.ptor < RANGO.ptor[0] || e.ptor > RANGO.ptor[1]) avisos.push('Perímetro fuera del rango de la base (' + RANGO.ptor[0] + '–' + RANGO.ptor[1] + ' cm). Estimación menos confiable.');
-    if(e.alt !== null && (e.alt < RANGO.alt[0] || e.alt > RANGO.alt[1])) avisos.push('Altura fuera del rango de la base (' + RANGO.alt[0] + '–' + RANGO.alt[1] + ' cm). Estimación menos confiable.');
-    var r = predecir(modo, e.ptor, e.alt, e.sexo);
+    if(e.ptor < RANGO.ptor[0] || e.ptor > RANGO.ptor[1]) avisos.push('Perímetro fuera del rango del modelo (' + RANGO.ptor[0] + '–' + RANGO.ptor[1] + ' cm). Estimación menos confiable.');
+    if(e.usaAlt && (e.alt < RANGO.alt[0] || e.alt > RANGO.alt[1])) avisos.push('Altura fuera del rango del modelo (' + RANGO.alt[0] + '–' + RANGO.alt[1] + ' cm). Estimación menos confiable.');
+    var r = predecir(e.usaAlt, e.ptor, e.alt || 0, e.sexo);
+    $('est-vacia').classList.add('hidden'); $('est-valor').classList.remove('hidden');
     var peso = $('peso'), nuevo = fmt(r.p) + ' kg';
-    if(peso.textContent !== nuevo){
-      peso.textContent = nuevo;
-      peso.classList.remove('pulso'); void peso.offsetWidth; peso.classList.add('pulso');
-    }
+    if(peso.textContent !== nuevo){ peso.textContent = nuevo; peso.classList.remove('pulso'); void peso.offsetWidth; peso.classList.add('pulso'); }
     $('rango').textContent = fmt(r.lo) + ' – ' + fmt(r.hi) + ' kg';
+    $('metodo').textContent = e.usaAlt ? 'Método: altura + perímetro + sexo' : 'Método: solo perímetro';
     mostrarAviso(avisos);
-    return { estimado:r.p, ptor:e.ptor, alt:e.alt, modo:modo };
+    return { estimado:r.p, ptor:e.ptor, alt: e.usaAlt ? e.alt : null, usaAlt:e.usaAlt };
   }
   function mostrarAviso(lista){
     var el = $('aviso'); el.innerHTML = '';
@@ -466,77 +383,63 @@ p.nota{font-size:12.5px;color:var(--muted);margin:10px 0 0}
     else el.classList.remove('on');
   }
 
-  // ---------- Guardar ----------
   $('btn-guardar').addEventListener('click', function(){
-    var a = animal();
-    if(!a){ $('dlg-nuevo').showModal(); toast('Primero crea un animal'); return; }
-    var r = actualizarResultado();
-    if(!r){ toast('Completa las medidas'); return; }
+    var nombre = $('animal').value.trim();
+    if(!nombre){ toast('Escribe la identificación del animal'); $('animal').focus(); return; }
+    var r = actualizarEstimacion();
+    if(!r){ toast('Escribe el perímetro torácico'); $('ptor').focus(); return; }
+    var a = buscarAnimal(nombre);
+    if(!a){ a = { id: nuevoId(), nombre: nombre, sexo: $('sexo').value, registros: [] }; datos.animales.push(a); }
+    else a.sexo = $('sexo').value;
     var real = num($('real').value);
     a.registros.push({
-      fecha: $('fecha').value || hoyISO(), ptor: r.ptor, alt: r.alt, modo: r.modo,
-      estimado: redondear1(r.estimado), real: (real && real > 0) ? redondear1(real) : null
+      fecha: $('fecha').value || hoyISO(), ptor: r.ptor, alt: r.alt, modo: r.usaAlt ? 'completo' : 'ptor',
+      estimado: r1(r.estimado), real: (real && real > 0) ? r1(real) : null
     });
     ordenar(a);
-    $('real').value = '';
     if(guardar()){ vibrar(); toast('Medición guardada · ' + a.nombre); }
     else toast('No se pudo guardar en este dispositivo');
-    renderTodo();
+    // Deja el nombre y la fecha para la siguiente medición; limpia solo las medidas
+    $('ptor').value = ''; $('alt').value = ''; $('real').value = '';
+    refrescarListaNombres();
+    actualizarEstimacion();
   });
 
-  // ---------- Historial ----------
-  function renderHistorial(){
-    var a = animal(), lista = $('hist-lista');
-    lista.innerHTML = '';
-    $('hist-titulo').textContent = a ? 'Historial · ' + a.nombre : 'Historial';
-    if(!a){ lista.innerHTML = '<div class="vacio"><div class="icono">📋</div>Crea un animal para ver su historial.</div>'; return; }
-    if(!a.registros.length){ lista.innerHTML = '<div class="vacio"><div class="icono">📏</div>Aún no hay mediciones. Empieza en la pestaña Medir.</div>'; return; }
-    a.registros.slice().reverse().forEach(function(r){
-      var idx = a.registros.indexOf(r);
-      var f = aFecha(r.fecha);
-      var div = document.createElement('div'); div.className = 'registro';
-      var cab = document.createElement('div'); cab.className = 'fecha-bloque';
-      cab.innerHTML = '<div class="d">'+f.d+'</div><div class="m">'+f.m+' '+f.y+'</div>';
-      var datosDiv = document.createElement('div'); datosDiv.className = 'reg-datos';
-      datosDiv.innerHTML = '<b>'+r.ptor+' cm</b> perímetro' + (r.alt ? ' · '+r.alt+' cm altura' : ' · solo perímetro');
-      var pesos = document.createElement('div'); pesos.className = 'reg-pesos';
-      pesos.innerHTML = '<div class="est">'+fmt(r.estimado)+' kg</div>' + (r.real ? '<div class="real">báscula '+fmt(r.real)+' kg</div>' : '');
-      var borrar = document.createElement('div'); borrar.className = 'reg-borrar';
-      var bb = document.createElement('button'); bb.type='button'; bb.textContent='Borrar'; bb.setAttribute('aria-label','Borrar medición');
-      bb.addEventListener('click', function(){
-        confirmar('¿Borrar la medición del '+r.fecha+'?', function(){
-          a.registros.splice(idx,1); guardar(); toast('Medición eliminada'); renderTodo();
-        });
-      });
-      borrar.appendChild(bb);
-      div.appendChild(cab); div.appendChild(datosDiv); div.appendChild(pesos); div.appendChild(borrar);
-      lista.appendChild(div);
+  // ---------- Pestaña Animales ----------
+  function renderListaAnimales(){
+    var cont = $('lista-animales-ui');
+    $('lista-vista').classList.remove('hidden'); $('detalle-vista').classList.add('hidden');
+    cont.innerHTML = '';
+    if(!datos.animales.length){ cont.innerHTML = '<div class="vacio">Aún no hay animales. Registra una medición en la pestaña Medir.</div>'; return; }
+    datos.animales.slice().sort(function(a,b){ return a.nombre.localeCompare(b.nombre); }).forEach(function(a){
+      var btn = document.createElement('button'); btn.type='button'; btn.className='animal-item';
+      var ult = a.registros.length ? a.registros[a.registros.length-1] : null;
+      var peso = ult ? fmt(ult.real || ult.estimado) + ' kg' : '—';
+      btn.innerHTML = '<div><div class="nom">'+escHTML(a.nombre)+'</div><div class="sub">'+(a.sexo==='macho'?'Macho':'Hembra')+' · '+a.registros.length+' medición'+(a.registros.length===1?'':'es')+'</div></div><div class="peso-ult">'+peso+'</div>';
+      btn.addEventListener('click', function(){ vibrar(); animalVer = a.id; renderDetalle(); });
+      cont.appendChild(btn);
     });
   }
 
-  // ---------- Confirmación ----------
-  var accionPendiente = null;
-  function confirmar(texto, fn){ $('confirmar-texto').textContent = texto; accionPendiente = fn; $('dlg-confirmar').showModal(); }
-  $('confirmar-no').addEventListener('click', function(){ accionPendiente = null; $('dlg-confirmar').close(); });
-  $('confirmar-si').addEventListener('click', function(){ var f = accionPendiente; accionPendiente = null; $('dlg-confirmar').close(); if(f) f(); });
+  function renderDetalle(){
+    var a = porId(animalVer);
+    if(!a){ renderListaAnimales(); return; }
+    $('lista-vista').classList.add('hidden'); $('detalle-vista').classList.remove('hidden');
+    $('det-nombre').textContent = a.nombre;
+    renderGrafica(a);
+    renderHistorial(a);
+  }
+  $('btn-volver').addEventListener('click', function(){ animalVer = null; renderListaAnimales(); });
 
-  // ---------- Crecimiento ----------
-  function renderGrafica(){
-    var a = animal(), box = $('grafica'), stats = $('stats');
+  function renderGrafica(a){
+    var box = $('det-grafica'), stats = $('det-stats');
     box.innerHTML = ''; stats.innerHTML = '';
-    $('crec-titulo').textContent = a ? 'Crecimiento · ' + a.nombre : 'Crecimiento';
-    if(!a || !a.registros.length){
-      box.innerHTML = '<div class="vacio"><div class="icono">📈</div>La gráfica aparecerá con la primera medición.</div>';
-      return;
-    }
-    var pts = a.registros.map(function(r){
-      return { t: new Date(r.fecha+'T00:00:00').getTime(), y: r.real || r.estimado, real: !!r.real, fecha: r.fecha };
-    });
-    var tMin = Math.min.apply(null, pts.map(function(p){return p.t;}));
-    var tMax = Math.max.apply(null, pts.map(function(p){return p.t;}));
+    if(!a.registros.length){ box.innerHTML = '<div class="vacio">La gráfica aparecerá con la primera medición.</div>'; return; }
+    var pts = a.registros.map(function(r){ return { t:new Date(r.fecha+'T00:00:00').getTime(), y:r.real||r.estimado, real:!!r.real, fecha:r.fecha }; });
+    var tMin = Math.min.apply(null, pts.map(function(p){return p.t;})), tMax = Math.max.apply(null, pts.map(function(p){return p.t;}));
     if(tMax === tMin){ tMin -= 864e5*15; tMax += 864e5*15; }
-    var yMax = Math.max.apply(null, pts.map(function(p){return p.y;})) * 1.15;
-    var yMin = 0, W = 640, H = 290, m = {t:18,r:16,b:34,l:44};
+    var yMax = Math.max.apply(null, pts.map(function(p){return p.y;})) * 1.15, yMin = 0;
+    var W = 640, H = 280, m = {t:16,r:14,b:34,l:44};
     var X = function(t){ return m.l + (t-tMin)/(tMax-tMin)*(W-m.l-m.r); };
     var Y = function(v){ return H-m.b - (v-yMin)/(yMax-yMin)*(H-m.t-m.b); };
     var svg = '<svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Gráfica de crecimiento">';
@@ -548,10 +451,12 @@ p.nota{font-size:12.5px;color:var(--muted);margin:10px 0 0}
     var f0 = aFecha(pts[0].fecha), f1 = aFecha(pts[pts.length-1].fecha);
     svg += '<text x="'+m.l+'" y="'+(H-8)+'">'+f0.d+' '+f0.m+' '+f0.y+'</text>';
     svg += '<text x="'+(W-m.r)+'" y="'+(H-8)+'" text-anchor="end">'+f1.d+' '+f1.m+' '+f1.y+'</text>';
-    var d = pts.map(function(p,i){ return (i?'L':'M') + X(p.t).toFixed(1) + ' ' + Y(p.y).toFixed(1); }).join(' ');
-    svg += '<path d="'+d+'" fill="none" stroke="var(--est)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>';
+    if(pts.length > 1){
+      var d = pts.map(function(p,i){ return (i?'L':'M') + X(p.t).toFixed(1) + ' ' + Y(p.y).toFixed(1); }).join(' ');
+      svg += '<path d="'+d+'" fill="none" stroke="var(--est)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity=".45"/>';
+    }
     pts.forEach(function(p){
-      svg += '<circle class="punto" cx="'+X(p.t).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="5" fill="'+(p.real?'var(--real)':'var(--est)')+'" stroke="var(--card)" stroke-width="2"><title>'+p.fecha+': '+fmt(p.y)+' kg'+(p.real?' (báscula)':' (estimado)')+'</title></circle>';
+      svg += '<circle cx="'+X(p.t).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="5" fill="'+(p.real?'var(--real)':'var(--est)')+'" stroke="var(--card)" stroke-width="2"><title>'+p.fecha+': '+fmt(p.y)+' kg'+(p.real?' (báscula)':' (estimado)')+'</title></circle>';
     });
     svg += '</svg>';
     box.innerHTML = svg;
@@ -570,8 +475,49 @@ p.nota{font-size:12.5px;color:var(--muted);margin:10px 0 0}
     });
   }
 
+  function renderHistorial(a){
+    var lista = $('det-historial'); lista.innerHTML = '';
+    if(!a.registros.length){ lista.innerHTML = '<div class="vacio">Sin mediciones.</div>'; return; }
+    a.registros.slice().reverse().forEach(function(r){
+      var idx = a.registros.indexOf(r), f = aFecha(r.fecha);
+      var div = document.createElement('div'); div.className = 'registro';
+      div.innerHTML =
+        '<div class="fecha-bloque"><div class="d">'+f.d+'</div><div class="m">'+f.m+' '+f.y+'</div></div>' +
+        '<div class="reg-datos"><b>'+r.ptor+' cm</b> perímetro' + (r.alt ? ' · '+r.alt+' cm altura' : ' · solo perímetro') + '</div>' +
+        '<div class="reg-pesos"><div class="est">'+fmt(r.estimado)+' kg</div>' + (r.real ? '<div class="real">báscula '+fmt(r.real)+' kg</div>' : '') + '</div>' +
+        '<div class="reg-borrar"><button type="button">Borrar</button></div>';
+      div.querySelector('button').addEventListener('click', function(){
+        confirmar('¿Borrar la medición del '+r.fecha+'?', function(){
+          a.registros.splice(idx,1); guardar(); toast('Medición eliminada'); renderDetalle(); refrescarListaNombres();
+        });
+      });
+      lista.appendChild(div);
+    });
+  }
+
+  $('btn-borrar-animal').addEventListener('click', function(){
+    var a = porId(animalVer); if(!a) return;
+    confirmar('¿Eliminar a ' + a.nombre + ' y todo su historial?', function(){
+      datos.animales = datos.animales.filter(function(x){ return x.id !== a.id; });
+      guardar(); animalVer = null; toast('Animal eliminado'); refrescarListaNombres(); renderListaAnimales();
+    });
+  });
+
+  // ---------- Confirmación ----------
+  var accionPendiente = null;
+  function confirmar(texto, fn){ $('confirmar-texto').textContent = texto; accionPendiente = fn; $('dlg-confirmar').showModal(); }
+  $('confirmar-no').addEventListener('click', function(){ accionPendiente = null; $('dlg-confirmar').close(); });
+  $('confirmar-si').addEventListener('click', function(){ var f = accionPendiente; accionPendiente = null; $('dlg-confirmar').close(); if(f) f(); });
+
   // ---------- Respaldo CSV ----------
   function escCSV(v){ v=(v===null||v===undefined)?'':String(v); return /[",;\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }
+  function parseLinea(l){
+    var out=[],cur='',q=false;
+    for(var i=0;i<l.length;i++){ var ch=l[i];
+      if(q){ if(ch==='"'){ if(l[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=ch; }
+      else if(ch==='"') q=true; else if(ch===','){ out.push(cur); cur=''; } else cur+=ch; }
+    out.push(cur); return out;
+  }
   $('btn-exportar').addEventListener('click', function(){
     var filas = [['animal','sexo','fecha','perimetro_cm','altura_cm','modo','peso_estimado_kg','peso_bascula_kg']];
     datos.animales.forEach(function(a){ a.registros.forEach(function(r){ filas.push([a.nombre,a.sexo,r.fecha,r.ptor,r.alt,r.modo,r.estimado,r.real]); }); });
@@ -582,13 +528,6 @@ p.nota{font-size:12.5px;color:var(--muted);margin:10px 0 0}
     setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
     toast('Respaldo exportado');
   });
-  function parseLinea(l){
-    var out=[],cur='',q=false;
-    for(var i=0;i<l.length;i++){ var ch=l[i];
-      if(q){ if(ch==='"'){ if(l[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=ch; }
-      else if(ch==='"') q=true; else if(ch===','){ out.push(cur); cur=''; } else cur+=ch; }
-    out.push(cur); return out;
-  }
   $('btn-importar').addEventListener('click', function(){ $('archivo-import').click(); });
   $('archivo-import').addEventListener('change', function(ev){
     var f = ev.target.files && ev.target.files[0]; if(!f) return;
@@ -598,41 +537,28 @@ p.nota{font-size:12.5px;color:var(--muted);margin:10px 0 0}
         var lineas = String(lector.result).replace(/^﻿/,'').split(/\r?\n/).filter(function(l){ return l.trim(); });
         var cab = lineas.shift().split(','), ix = function(n){ return cab.indexOf(n); }, nuevos = 0;
         lineas.forEach(function(l){
-          var c = parseLinea(l), nombre = c[ix('animal')];
+          var c = parseLinea(l), nombre = (c[ix('animal')]||'').trim();
           if(!nombre) return;
-          var a = datos.animales.filter(function(x){ return x.nombre === nombre; })[0];
+          var a = buscarAnimal(nombre);
           if(!a){ a = { id:nuevoId(), nombre:nombre, sexo:c[ix('sexo')]||'hembra', registros:[] }; datos.animales.push(a); }
           var fecha = c[ix('fecha')], ptor = num(c[ix('perimetro_cm')]);
-          if(!fecha || a.registros.some(function(r){ return r.fecha===fecha && r.ptor===ptor; })) return;
+          if(!fecha || ptor === null || a.registros.some(function(r){ return r.fecha===fecha && r.ptor===ptor; })) return;
           a.registros.push({ fecha:fecha, ptor:ptor, alt:num(c[ix('altura_cm')]), modo:c[ix('modo')]||'ptor', estimado:num(c[ix('peso_estimado_kg')]), real:num(c[ix('peso_bascula_kg')]) });
           nuevos++;
         });
-        datos.animales.forEach(ordenar); guardar();
-        if(!animalId && datos.animales.length) animalId = datos.animales[0].id;
-        renderTodo(); toast('Importadas ' + nuevos + ' mediciones');
+        datos.animales.forEach(ordenar); guardar(); refrescarListaNombres();
+        toast('Importadas ' + nuevos + ' mediciones');
       }catch(e){ toast('El archivo no es un respaldo válido'); }
       $('archivo-import').value = '';
     };
     lector.readAsText(f,'utf-8');
   });
 
-  // ---------- Render general ----------
-  function renderTodo(){
-    var a = animal();
-    $('sin-animal').classList.toggle('hidden', !!a);
-    $('panel-medir').classList.toggle('hidden', !a);
-    renderChips();
-    if(vista === 'v-hist') renderHistorial();
-    if(vista === 'v-crec') renderGrafica();
-    actualizarResultado();
-  }
-
   // ---------- Inicio ----------
   $('fecha').value = hoyISO();
   cargar();
-  if(datos.animales.length) animalId = datos.animales[0].id;
-  actualizarModo();
-  renderTodo();
+  refrescarListaNombres();
+  actualizarEstimacion();
 
   if('serviceWorker' in navigator){
     window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
