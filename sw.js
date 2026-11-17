@@ -1,5 +1,5 @@
 // Service worker: guarda la app para que funcione sin conexión.
-const VERSION = 'sicalc-v3';
+const VERSION = 'sicalc-v4';
 const SHELL = [
   './',
   './index.html',
