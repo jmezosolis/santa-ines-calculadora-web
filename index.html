@@ -84,6 +84,11 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 .estimacion .peso.pulso{transform:scale(1.05)}
 .estimacion .rango{text-align:center;color:var(--muted);font-size:14px}
 .estimacion .metodo{text-align:center;color:var(--muted);font-size:12.5px;margin-top:8px}
+.selector{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px}
+.selector button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:600;padding:10px 8px;border-radius:10px;cursor:pointer;transition:background .25s,color .25s}
+.selector button[aria-pressed="true"]{background:var(--navy);color:var(--navy-fg)}
+.selector button:active{transform:scale(.98)}
+input:disabled{opacity:.45}
 .aviso{background:var(--warn-bg);color:var(--warn-fg);border-radius:12px;padding:10px 12px;font-size:13px;margin-top:12px;display:none}
 .aviso.on{display:block}
 .aviso div+div{margin-top:4px}
@@ -152,6 +157,10 @@ dialog h3{margin:0 0 10px;font-size:17px}
 
   <!-- ===== MEDIR ===== -->
   <section class="view activa" id="v-medir" aria-label="Medir">
+    <div class="selector" role="group" aria-label="Modelo de estimación">
+      <button type="button" data-modelo="completo" aria-pressed="true">Altura + perímetro</button>
+      <button type="button" data-modelo="ptor" aria-pressed="false">Solo perímetro</button>
+    </div>
     <div class="card">
       <h2>Nueva medición</h2>
       <div class="fila2">
@@ -354,15 +363,32 @@ dialog h3{margin:0 0 10px;font-size:17px}
     actualizarEstimacion();
   });
   ['sexo','ptor','alt'].forEach(function(id){ $(id).addEventListener('input', actualizarEstimacion); $(id).addEventListener('change', actualizarEstimacion); });
+  // (el modelo se elige con los botones superiores; ver aplicarModelo)
+
+  var modeloSel = 'completo';
+  function aplicarModelo(){
+    document.querySelectorAll('[data-modelo]').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.modelo === modeloSel ? 'true':'false'); });
+    var usaAlt = modeloSel === 'completo';
+    $('alt').disabled = !usaAlt;
+    $('alt').closest('label').style.opacity = usaAlt ? '1' : '.5';
+    actualizarEstimacion();
+  }
+  document.querySelectorAll('[data-modelo]').forEach(function(b){
+    b.addEventListener('click', function(){ vibrar(); modeloSel = b.dataset.modelo; aplicarModelo(); });
+  });
 
   function leerForm(){
-    var alt = num($('alt').value);
-    return { ptor:num($('ptor').value), alt:alt, usaAlt: alt !== null && alt > 0, sexo: $('sexo').value };
+    var usaAlt = modeloSel === 'completo';
+    var alt = usaAlt ? num($('alt').value) : null;
+    return { ptor:num($('ptor').value), alt:alt, usaAlt:usaAlt, sexo: $('sexo').value, faltaAlt: usaAlt && !(alt > 0) };
   }
 
   function actualizarEstimacion(){
     var e = leerForm(), avisos = [];
-    if(!(e.ptor > 0)){
+    if(!(e.ptor > 0) || e.faltaAlt){
+      $('est-vacia').textContent = e.faltaAlt && e.ptor > 0
+        ? 'Escribe la altura a la cruz para usar el modelo de altura + perímetro.'
+        : 'Escribe el perímetro torácico para ver el peso estimado.';
       $('est-vacia').classList.remove('hidden'); $('est-valor').classList.add('hidden');
       mostrarAviso([]); return null;
     }
@@ -387,7 +413,12 @@ dialog h3{margin:0 0 10px;font-size:17px}
     var nombre = $('animal').value.trim();
     if(!nombre){ toast('Escribe la identificación del animal'); $('animal').focus(); return; }
     var r = actualizarEstimacion();
-    if(!r){ toast('Escribe el perímetro torácico'); $('ptor').focus(); return; }
+    if(!r){
+      var faltaAltura = modeloSel === 'completo' && !(num($('alt').value) > 0) && num($('ptor').value) > 0;
+      toast(faltaAltura ? 'Escribe la altura a la cruz' : 'Escribe el perímetro torácico');
+      (faltaAltura ? $('alt') : $('ptor')).focus();
+      return;
+    }
     var a = buscarAnimal(nombre);
     if(!a){ a = { id: nuevoId(), nombre: nombre, sexo: $('sexo').value, registros: [] }; datos.animales.push(a); }
     else a.sexo = $('sexo').value;
@@ -558,7 +589,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
   $('fecha').value = hoyISO();
   cargar();
   refrescarListaNombres();
-  actualizarEstimacion();
+  aplicarModelo();
 
   if('serviceWorker' in navigator){
     window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
