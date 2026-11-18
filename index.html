@@ -353,10 +353,10 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'datos.nota':'Los datos se guardan solo en este dispositivo. Exporta un respaldo de vez en cuando para no perderlos.',
       'btn.exportar':'Exportar CSV','btn.importar':'Importar CSV',
       'datos.modelo':'Modelo',
-      'datos.m1':'<b>Con altura y perímetro:</b> error medio de 3,5 kg (7,8 %).',
-      'datos.m2':'<b>Solo perímetro:</b> error medio de 4,0 kg (8,8 %).',
+      'datos.m1':'<b>Con altura y perímetro:</b> error medio de 3,5 kg (7,7 %).',
+      'datos.m2':'<b>Solo perímetro:</b> error medio de 4,0 kg (8,7 %).',
       'datos.m3':'Entrenado con ovinos Santa Inés de siete haciendas (2005 a 2019). Las estimaciones son orientativas: fuera de los rangos indicados o en otras razas, la precisión baja.',
-      'datos.version':'Versión de ecuaciones 2 · datos sin atípicos (n = 3 572).','pie':'Estimación de peso vivo para ovinos Santa Inés.',
+      'datos.version':'Versión de ecuaciones 3 · datos depurados sin atípicos (n = 3 568).','pie':'Estimación de peso vivo para ovinos Santa Inés.',
       'toast.animal':'Escribe la identificación del animal','toast.ptor':'Escribe el perímetro torácico','toast.alt':'Escribe la altura a la cruz',
       'toast.guardada':'Medición guardada · {n}','toast.noguardar':'No se pudo guardar en este dispositivo',
       'toast.eliminada':'Medición eliminada','toast.animalEliminado':'Animal eliminado',
@@ -398,10 +398,10 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'datos.nota':'Data is stored only on this device. Export a backup from time to time so you don\'t lose it.',
       'btn.exportar':'Export CSV','btn.importar':'Import CSV',
       'datos.modelo':'Model',
-      'datos.m1':'<b>Height + chest:</b> mean error 3.5 kg (7.8 %).',
-      'datos.m2':'<b>Chest only:</b> mean error 4.0 kg (8.8 %).',
+      'datos.m1':'<b>Height + chest:</b> mean error 3.5 kg (7.7 %).',
+      'datos.m2':'<b>Chest only:</b> mean error 4.0 kg (8.7 %).',
       'datos.m3':'Trained on Santa Inês sheep from seven farms (2005–2019). Estimates are indicative: outside the stated ranges or in other breeds, accuracy drops.',
-      'datos.version':'Equation version 2 · data without outliers (n = 3,572).','pie':'Live weight estimation for Santa Inês sheep.',
+      'datos.version':'Equation version 3 · data without outliers (n = 3,568).','pie':'Live weight estimation for Santa Inês sheep.',
       'toast.animal':'Enter the animal\'s identification','toast.ptor':'Enter chest girth','toast.alt':'Enter withers height',
       'toast.guardada':'Measurement saved · {n}','toast.noguardar':'Could not save on this device',
       'toast.eliminada':'Measurement deleted','toast.animalEliminado':'Animal deleted',
@@ -443,10 +443,10 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'datos.nota':'Os dados ficam salvos apenas neste dispositivo. Exporte um backup de tempos em tempos para não perdê-los.',
       'btn.exportar':'Exportar CSV','btn.importar':'Importar CSV',
       'datos.modelo':'Modelo',
-      'datos.m1':'<b>Altura + perímetro:</b> erro médio de 3,5 kg (7,8 %).',
-      'datos.m2':'<b>Só perímetro:</b> erro médio de 4,0 kg (8,8 %).',
+      'datos.m1':'<b>Altura + perímetro:</b> erro médio de 3,5 kg (7,7 %).',
+      'datos.m2':'<b>Só perímetro:</b> erro médio de 4,0 kg (8,7 %).',
       'datos.m3':'Treinado com ovinos Santa Inês de sete fazendas (2005 a 2019). As estimativas são orientativas: fora das faixas indicadas ou em outras raças, a precisão diminui.',
-      'datos.version':'Versão das equações 2 · dados sem atípicos (n = 3 572).','pie':'Estimativa de peso vivo para ovinos Santa Inês.',
+      'datos.version':'Versão das equações 3 · dados sem atípicos (n = 3 568).','pie':'Estimativa de peso vivo para ovinos Santa Inês.',
       'toast.animal':'Digite a identificação do animal','toast.ptor':'Digite o perímetro torácico','toast.alt':'Digite a altura da cernelha',
       'toast.guardada':'Medição salva · {n}','toast.noguardar':'Não foi possível salvar neste dispositivo',
       'toast.eliminada':'Medição excluída','toast.animalEliminado':'Animal excluído',
@@ -497,8 +497,8 @@ dialog h3{margin:0 0 10px;font-size:17px}
 
   // ---------- Modelos (regresión lineal en log, datos limpios n=3598) ----------
   var MODELOS = {
-    completo: { b0:-9.43734, ptor:2.09618, alt:0.92390, macho:0.03911, smear:1.00508, sigma:0.10083 },
-    ptor:     { b0:-8.08157, ptor:2.67104, smear:1.00650, sigma:0.11403 }
+    completo: { b0:-9.42333, ptor:2.10458, alt:0.91175, macho:0.03909, smear:1.00499, sigma:0.0999 },
+    ptor:     { b0:-8.08409, ptor:2.6716, smear:1.00635, sigma:0.1128 }
   };
   var RANGO = { ptor:[46,113], alt:[43,81] };
   var modeloSel = 'completo';
