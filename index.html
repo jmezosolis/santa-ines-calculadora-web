@@ -356,7 +356,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'datos.m1':'<b>Con altura y perímetro:</b> error medio de 3,5 kg (7,7 %).',
       'datos.m2':'<b>Solo perímetro:</b> error medio de 4,0 kg (8,7 %).',
       'datos.m3':'Entrenado con ovinos Santa Inés de siete haciendas (2005 a 2019). Las estimaciones son orientativas: fuera de los rangos indicados o en otras razas, la precisión baja.',
-      'datos.version':'Versión de ecuaciones 3 · datos depurados sin atípicos (n = 3 568).','pie':'Estimación de peso vivo para ovinos Santa Inés.',
+      'datos.version':'Versión de ecuaciones 4 · datos depurados sin atípicos (n = 3 565).','pie':'Estimación de peso vivo para ovinos Santa Inés.',
       'toast.animal':'Escribe la identificación del animal','toast.ptor':'Escribe el perímetro torácico','toast.alt':'Escribe la altura a la cruz',
       'toast.guardada':'Medición guardada · {n}','toast.noguardar':'No se pudo guardar en este dispositivo',
       'toast.eliminada':'Medición eliminada','toast.animalEliminado':'Animal eliminado',
@@ -401,7 +401,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'datos.m1':'<b>Height + chest:</b> mean error 3.5 kg (7.7 %).',
       'datos.m2':'<b>Chest only:</b> mean error 4.0 kg (8.7 %).',
       'datos.m3':'Trained on Santa Inês sheep from seven farms (2005–2019). Estimates are indicative: outside the stated ranges or in other breeds, accuracy drops.',
-      'datos.version':'Equation version 3 · data without outliers (n = 3,568).','pie':'Live weight estimation for Santa Inês sheep.',
+      'datos.version':'Equation version 4 · data without outliers (n = 3,565).','pie':'Live weight estimation for Santa Inês sheep.',
       'toast.animal':'Enter the animal\'s identification','toast.ptor':'Enter chest girth','toast.alt':'Enter withers height',
       'toast.guardada':'Measurement saved · {n}','toast.noguardar':'Could not save on this device',
       'toast.eliminada':'Measurement deleted','toast.animalEliminado':'Animal deleted',
@@ -446,7 +446,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'datos.m1':'<b>Altura + perímetro:</b> erro médio de 3,5 kg (7,7 %).',
       'datos.m2':'<b>Só perímetro:</b> erro médio de 4,0 kg (8,7 %).',
       'datos.m3':'Treinado com ovinos Santa Inês de sete fazendas (2005 a 2019). As estimativas são orientativas: fora das faixas indicadas ou em outras raças, a precisão diminui.',
-      'datos.version':'Versão das equações 3 · dados sem atípicos (n = 3 568).','pie':'Estimativa de peso vivo para ovinos Santa Inês.',
+      'datos.version':'Versão das equações 4 · dados sem atípicos (n = 3 565).','pie':'Estimativa de peso vivo para ovinos Santa Inês.',
       'toast.animal':'Digite a identificação do animal','toast.ptor':'Digite o perímetro torácico','toast.alt':'Digite a altura da cernelha',
       'toast.guardada':'Medição salva · {n}','toast.noguardar':'Não foi possível salvar neste dispositivo',
       'toast.eliminada':'Medição excluída','toast.animalEliminado':'Animal excluído',
@@ -497,8 +497,8 @@ dialog h3{margin:0 0 10px;font-size:17px}
 
   // ---------- Modelos (regresión lineal en log, datos limpios n=3598) ----------
   var MODELOS = {
-    completo: { b0:-9.42333, ptor:2.10458, alt:0.91175, macho:0.03909, smear:1.00499, sigma:0.0999 },
-    ptor:     { b0:-8.08409, ptor:2.6716, smear:1.00635, sigma:0.1128 }
+    completo: { b0:-9.43106, ptor:2.11339, alt:0.90433, macho:0.04144, smear:1.00494, sigma:0.09938 },
+    ptor:     { b0:-8.10121, ptor:2.67554, smear:1.00629, sigma:0.11218 }
   };
   var RANGO = { ptor:[46,113], alt:[43,81] };
   var modeloSel = 'completo';
