@@ -185,8 +185,8 @@ dialog h3{margin:0 0 10px;font-size:17px}
   <!-- ===== MEDIR ===== -->
   <section class="view activa" id="v-medir" aria-label="Medir">
     <div class="selector" role="group" aria-label="Modelo de estimación" data-i18n-aria="aria.modelo">
-      <button type="button" data-modelo="completo" aria-pressed="true"><span class="nom" data-i18n="modelo.completo">Altura + perímetro</span><span class="err" data-i18n="err.completo">error medio ±3,7 kg</span></button>
-      <button type="button" data-modelo="ptor" aria-pressed="false"><span class="nom" data-i18n="modelo.ptor">Solo perímetro</span><span class="err" data-i18n="err.ptor">error medio ±4,1 kg</span></button>
+      <button type="button" data-modelo="completo" aria-pressed="true"><span class="nom" data-i18n="modelo.completo">Altura + perímetro</span><span class="err" data-i18n="err.completo">error medio ±3,5 kg</span></button>
+      <button type="button" data-modelo="ptor" aria-pressed="false"><span class="nom" data-i18n="modelo.ptor">Solo perímetro</span><span class="err" data-i18n="err.ptor">error medio ±4,0 kg</span></button>
     </div>
 
     <div class="card">
@@ -292,6 +292,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
       <p class="nota" style="margin-top:0" data-i18n-html="datos.m1">.</p>
       <p class="nota" data-i18n-html="datos.m2">.</p>
       <p class="nota" data-i18n="datos.m3">.</p>
+      <p class="nota" data-i18n="datos.version">.</p>
     </div>
   </section>
 
@@ -322,7 +323,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'tab.medir':'Medir','tab.animales':'Animales','tab.datos':'Datos',
       'aria.modelo':'Modelo de estimación',
       'modelo.completo':'Altura + perímetro','modelo.ptor':'Solo perímetro',
-      'err.completo':'error medio ±3,7 kg','err.ptor':'error medio ±4,1 kg',
+      'err.completo':'error medio ±3,5 kg','err.ptor':'error medio ±4,0 kg',
       'card.nueva':'Nueva medición','card.estimacion':'Estimación',
       'lbl.animal':'Animal','ph.animal':'Identificación','lbl.fecha':'Fecha','lbl.sexo':'Sexo',
       'opt.hembra':'Hembra','opt.macho':'Macho',
@@ -352,10 +353,10 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'datos.nota':'Los datos se guardan solo en este dispositivo. Exporta un respaldo de vez en cuando para no perderlos.',
       'btn.exportar':'Exportar CSV','btn.importar':'Importar CSV',
       'datos.modelo':'Modelo',
-      'datos.m1':'<b>Con altura y perímetro:</b> error medio de 3,7 kg (8,6 %).',
-      'datos.m2':'<b>Solo perímetro:</b> error medio de 4,1 kg (9,6 %).',
+      'datos.m1':'<b>Con altura y perímetro:</b> error medio de 3,5 kg (7,8 %).',
+      'datos.m2':'<b>Solo perímetro:</b> error medio de 4,0 kg (8,8 %).',
       'datos.m3':'Entrenado con ovinos Santa Inés de siete haciendas (2005 a 2019). Las estimaciones son orientativas: fuera de los rangos indicados o en otras razas, la precisión baja.',
-      'pie':'Estimación de peso vivo para ovinos Santa Inés.',
+      'datos.version':'Versión de ecuaciones 2 · datos sin atípicos (n = 3 572).','pie':'Estimación de peso vivo para ovinos Santa Inés.',
       'toast.animal':'Escribe la identificación del animal','toast.ptor':'Escribe el perímetro torácico','toast.alt':'Escribe la altura a la cruz',
       'toast.guardada':'Medición guardada · {n}','toast.noguardar':'No se pudo guardar en este dispositivo',
       'toast.eliminada':'Medición eliminada','toast.animalEliminado':'Animal eliminado',
@@ -367,7 +368,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'tab.medir':'Measure','tab.animales':'Animals','tab.datos':'Data',
       'aria.modelo':'Estimation model',
       'modelo.completo':'Height + chest','modelo.ptor':'Chest only',
-      'err.completo':'mean error ±3.7 kg','err.ptor':'mean error ±4.1 kg',
+      'err.completo':'mean error ±3.5 kg','err.ptor':'mean error ±4.0 kg',
       'card.nueva':'New measurement','card.estimacion':'Estimate',
       'lbl.animal':'Animal','ph.animal':'Identification','lbl.fecha':'Date','lbl.sexo':'Sex',
       'opt.hembra':'Female','opt.macho':'Male',
@@ -397,10 +398,10 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'datos.nota':'Data is stored only on this device. Export a backup from time to time so you don\'t lose it.',
       'btn.exportar':'Export CSV','btn.importar':'Import CSV',
       'datos.modelo':'Model',
-      'datos.m1':'<b>Height + chest:</b> mean error 3.7 kg (8.6 %).',
-      'datos.m2':'<b>Chest only:</b> mean error 4.1 kg (9.6 %).',
+      'datos.m1':'<b>Height + chest:</b> mean error 3.5 kg (7.8 %).',
+      'datos.m2':'<b>Chest only:</b> mean error 4.0 kg (8.8 %).',
       'datos.m3':'Trained on Santa Inês sheep from seven farms (2005–2019). Estimates are indicative: outside the stated ranges or in other breeds, accuracy drops.',
-      'pie':'Live weight estimation for Santa Inês sheep.',
+      'datos.version':'Equation version 2 · data without outliers (n = 3,572).','pie':'Live weight estimation for Santa Inês sheep.',
       'toast.animal':'Enter the animal\'s identification','toast.ptor':'Enter chest girth','toast.alt':'Enter withers height',
       'toast.guardada':'Measurement saved · {n}','toast.noguardar':'Could not save on this device',
       'toast.eliminada':'Measurement deleted','toast.animalEliminado':'Animal deleted',
@@ -412,7 +413,7 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'tab.medir':'Medir','tab.animales':'Animais','tab.datos':'Dados',
       'aria.modelo':'Modelo de estimativa',
       'modelo.completo':'Altura + perímetro','modelo.ptor':'Só perímetro',
-      'err.completo':'erro médio ±3,7 kg','err.ptor':'erro médio ±4,1 kg',
+      'err.completo':'erro médio ±3,5 kg','err.ptor':'erro médio ±4,0 kg',
       'card.nueva':'Nova medição','card.estimacion':'Estimativa',
       'lbl.animal':'Animal','ph.animal':'Identificação','lbl.fecha':'Data','lbl.sexo':'Sexo',
       'opt.hembra':'Fêmea','opt.macho':'Macho',
@@ -442,10 +443,10 @@ dialog h3{margin:0 0 10px;font-size:17px}
       'datos.nota':'Os dados ficam salvos apenas neste dispositivo. Exporte um backup de tempos em tempos para não perdê-los.',
       'btn.exportar':'Exportar CSV','btn.importar':'Importar CSV',
       'datos.modelo':'Modelo',
-      'datos.m1':'<b>Altura + perímetro:</b> erro médio de 3,7 kg (8,6 %).',
-      'datos.m2':'<b>Só perímetro:</b> erro médio de 4,1 kg (9,6 %).',
+      'datos.m1':'<b>Altura + perímetro:</b> erro médio de 3,5 kg (7,8 %).',
+      'datos.m2':'<b>Só perímetro:</b> erro médio de 4,0 kg (8,8 %).',
       'datos.m3':'Treinado com ovinos Santa Inês de sete fazendas (2005 a 2019). As estimativas são orientativas: fora das faixas indicadas ou em outras raças, a precisão diminui.',
-      'pie':'Estimativa de peso vivo para ovinos Santa Inês.',
+      'datos.version':'Versão das equações 2 · dados sem atípicos (n = 3 572).','pie':'Estimativa de peso vivo para ovinos Santa Inês.',
       'toast.animal':'Digite a identificação do animal','toast.ptor':'Digite o perímetro torácico','toast.alt':'Digite a altura da cernelha',
       'toast.guardada':'Medição salva · {n}','toast.noguardar':'Não foi possível salvar neste dispositivo',
       'toast.eliminada':'Medição excluída','toast.animalEliminado':'Animal excluído',
@@ -496,8 +497,8 @@ dialog h3{margin:0 0 10px;font-size:17px}
 
   // ---------- Modelos (regresión lineal en log, datos limpios n=3598) ----------
   var MODELOS = {
-    completo: { b0:-9.42603, ptor:1.93211, alt:1.09431, macho:0.02936, smear:1.01005, sigma:0.1309 },
-    ptor:     { b0:-7.81092, ptor:2.6106, smear:1.01276, sigma:0.1458 }
+    completo: { b0:-9.43734, ptor:2.09618, alt:0.92390, macho:0.03911, smear:1.00508, sigma:0.10083 },
+    ptor:     { b0:-8.08157, ptor:2.67104, smear:1.00650, sigma:0.11403 }
   };
   var RANGO = { ptor:[46,113], alt:[43,81] };
   var modeloSel = 'completo';
